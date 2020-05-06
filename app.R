@@ -4,16 +4,19 @@
 # if (!requireNamespace("BiocManager", quietly = TRUE))
 #   install.packages("BiocManager")
 # 
-# BiocManager::install(c("shiny", "shinythemes", "tidyr", "ggplot2", "markdown", "shinydashboard"))
+# BiocManager::install(c("shiny", "shinythemes", "tidyr", "ggplot2", "markdown", "shinydashboard", "shinycssloaders"))
 
-
-library(shiny, shinythemes, shinydashboard)
-library(tidyr, ggplot)
+library(shinycssloaders)
+library(shiny)
+library(shinythemes)
+library(shinydashboard)
+library(tidyr)
+library(ggplot2)
 library(markdown)
 
 ## Main module.
 
-  ui <- fluidPage(
+  ui <- fluidPage(theme = shinytheme("united"),
                   titlePanel(div(column(width = 9, h2("GR-Shiny")), 
                                  column(3, img(height = 100, width = 200, src = "labLogo.png")))),
   br(),
@@ -31,90 +34,53 @@ library(markdown)
                                        src="GSA_ChIP_Seq_Master_Table.pdf")), # Summary
                   tabPanel("Results", 
                            tabsetPanel(type = "pill",
-                                       tabPanel("Dataset Plots",
+                                       tabPanel("Plots on relative performance",
+                                                h5("Please select a Comparison metric from the right."),
                                                 conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 
                                                                                                        height="500", 
-                                                                                                       width="1000",
+                                                                                                       width="900",
                                                                                                        align="center")),
                                                 conditionalPanel(condition = "input.m=='sp'", tags$img(src="Specificity_ggplot.jpeg",
                                                                                                        height="500", 
-                                                                                                       width="1000",
+                                                                                                       width="900",
                                                                                                        align="center")),
                                                 conditionalPanel(condition = "input.m=='pr'", tags$img(src="Prioritization_ggplot.jpeg",
                                                                                                        height="500", 
-                                                                                                       width="1000",
+                                                                                                       width="900",
                                                                                                        align="center")),
                                                 conditionalPanel(condition = "input.m=='pn'", tags$img(src="Precision_ggplot.jpeg",
                                                                                                        height="500", 
-                                                                                                       width="1000",
+                                                                                                       width="900",
                                                                                                        align="center"))),     # Display plot
+                                       tabPanel("Plots on Overall Performance",
+                                                h5("Please select a GSA tool and a Gold Standard dataset from the right."),
+                                                plotOutput(outputId = "studyplot", width = "100%") %>% withSpinner(color="#FF5733", type = 4, size = 0.25)),
                                        tabPanel("ROC Plot",
                                                 tags$img(src="ROC_Plot.jpeg",
                                                          height="500",
-                                                         width="1000",
+                                                         width="900",
                                                          align="center")))) # ROC Plot
       )),
              sidebarLayout("", fluid = TRUE,
                sidebarPanel(
-                 checkboxGroupInput(inputId = "m", label = "Select a gold standard dataset",
+                radioButtons(inputId = "d", label = "Select a Gold Standard dataset",
                                     choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
                                                 "Alzheimer's Disease"='ad'),
                                     selected = 'cc'),
                  br(),
-                 checkboxGroupInput(inputId = "t", label = "Select a GSA tool",
+                 radioButtons(inputId = "t", label = "Select a GSA tool",
                                     choices = c("Chipenrich"='ce', "Broadenrich"='be',  "Seq2pathway"='sy', "Enrichr"='er', "GREAT"='gt'),
                                     selected = 'ce'),
                  br(),
-                 checkboxGroupInput(inputId = "d", label = "Select a comparison metric",
+                 radioButtons(inputId = "m", label = "Select a Comparison Metric",
                                     choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
                                     selected = 'sn'),
-                 br(),
-                 actionButton(inputId = "submit", label="Submit")
+                 br()
              )
     )),
-    tabPanel("Analyze Data", fluid = TRUE,     mainPanel(
-      tabsetPanel(type = "pill",
-                  tabPanel("Preview", tableOutput(outputId = "contents")), # Show file contents.
-                  tabPanel("Results", 
-                           tabsetPanel(type = "pill",
-                                       tabPanel("Dataset Plots", plotOutput(outputId = "userplot", width = "100%")), # User selected plots,
-                                       tabPanel("ROC Plot",
-                                                tags$img(src="ROC_Plot.jpeg",
-                                                         height="500",
-                                                         width="1000",
-                                                         align="center")))) # ROC Plot
-      )),
-             sidebarLayout("", fluid = TRUE,
-               sidebarPanel(
-                 checkboxGroupInput(inputId = "m", label = "Select a gold standard dataset",
-                                    choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
-                                                "Alzheimer's Disease"='ad'),
-                                    selected = 'cc'),
-                 br(),
-                 checkboxGroupInput(inputId = "t", label = "Select a GSA tool",
-                                    choices = c("Chipenrich"='ce', "Broadenrich"='be',  "Seq2pathway"='sy', "Enrichr"='er', "GREAT"='gt'),
-                                    selected = 'ce'),
-                 br(),
-                 checkboxGroupInput(inputId = "d", label = "Select a comparison metric",
-                                    choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
-                                    selected = 'sn'),
-                 br(),
-                 helpText(a("Click here to view a sample dataset", href="https://i.ibb.co/g9Nf8fs/testData.png")),
-                 br(),
-                 fileInput(inputId = "bds", label = "Upload your benchmark dataset",
-                           accept = c(
-                             "text/csv",
-                             "tab/comma-separated-values,text/plain",
-                             ".csv",
-                             ".txt")),
-                 tags$hr(), # Horizontal rule
-                 checkboxInput(inputId = "header", label = "Header", TRUE),
-                 actionButton(inputId = "submit", label="Submit")
-             )
-    )
-  ),
-  tabPanel("Frequently Asked Questions", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/faq.md")))),
-  tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md")))))
+    tabPanel("Analyze Data", fluid = TRUE, mainPanel()),
+    tabPanel("Frequently Asked Questions", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/faq.md")))),
+    tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md")))))
     
 )
 
@@ -161,10 +127,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Chipenrich", y= "Colorectal Cancer")
+          labs(x= "Chipenrich", y= "Colorectal Cancer"))
       }
       
       ## Colorectal Cancer and Broadenrich
@@ -178,10 +144,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Broadenrich", y= "Colorectal Cancer")
+          labs(x= "Broadenrich", y= "Colorectal Cancer"))
     
       }
       
@@ -196,10 +162,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Seq2pathway", y= "Colorectal Cancer")
+          labs(x= "Seq2pathway", y= "Colorectal Cancer"))
       }
       
       ## Colorectal Cancer and Enrichr
@@ -213,10 +179,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Enrichr", y= "Colorectal Cancer")
+          labs(x= "Enrichr", y= "Colorectal Cancer"))
       }
       
       ## Colorectal Cancer and GREAT
@@ -230,10 +196,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "GREAT", y= "Colorectal Cancer")
+          labs(x= "GREAT", y= "Colorectal Cancer"))
       }
   
       ## Gastric Cancer and Chipenrich
@@ -247,10 +213,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Chipenrich", y= "Gastric Cancer")
+          labs(x= "Chipenrich", y= "Gastric Cancer"))
       }
       
       ## Gastric Cancer and Broadenrich
@@ -264,10 +230,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Broadenrich", y= "Gastric Cancer")
+          labs(x= "Broadenrich", y= "Gastric Cancer"))
       }
       
       ## Gastric Cancer and Seq2pathway
@@ -281,10 +247,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Seq2pathway", y= "Gastric Cancer")
+          labs(x= "Seq2pathway", y= "Gastric Cancer"))
       }
       
       ## Gastric Cancer and Enrichr
@@ -298,10 +264,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Enrichr", y= "Gastric Cancer")
+          labs(x= "Enrichr", y= "Gastric Cancer"))
       }
       
       ## Gastric Cancer and GREAT
@@ -315,10 +281,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "GREAT", y= "Gastric Cancer")
+          labs(x= "GREAT", y= "Gastric Cancer"))
       }
       
       ## Prostate Cancer and Chipenrich
@@ -332,10 +298,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Chipenrich", y= "Prostate Cancer")
+          labs(x= "Chipenrich", y= "Prostate Cancer"))
       }
       
       ## Prostate Cancer and Broadenrich
@@ -349,10 +315,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Broadenrich", y= "Prostate Cancer")
+          labs(x= "Broadenrich", y= "Prostate Cancer"))
       }
       
       ## Prostate Cancer and Seq2pathway
@@ -366,10 +332,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Seq2pathway", y= "Prostate Cancer")
+          labs(x= "Seq2pathway", y= "Prostate Cancer"))
       }
       
       ## Prostate Cancer and Enrichr
@@ -383,10 +349,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Enrichr", y= "Prostate Cancer")
+          labs(x= "Enrichr", y= "Prostate Cancer"))
       }
       
       ## Prostate Cancer and GREAT
@@ -400,10 +366,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "GREAT", y= "Prostate Cancer")
+          labs(x= "GREAT", y= "Prostate Cancer"))
       }
       
       ## Alzheimer's Disease and Chipenrich
@@ -417,10 +383,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Chipenrich", y= "Alzheimer's Disease")
+          labs(x= "Chipenrich", y= "Alzheimer's Disease"))
       }
       
       ## Alzheimer's Disease and Broadenrich
@@ -434,10 +400,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Broadenrich", y= "Alzheimer's Disease")
+          labs(x= "Broadenrich", y= "Alzheimer's Disease"))
       }
       
       ## Alzheimer's Disease and Seq2pathway
@@ -451,10 +417,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Seq2pathway", y= "Alzheimer's Disease")
+          labs(x= "Seq2pathway", y= "Alzheimer's Disease"))
       }
       
       ## Alzheimer's Disease and Enrichr
@@ -468,10 +434,10 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "Enrichr", y= "Alzheimer's Disease")
+          labs(x= "Enrichr", y= "Alzheimer's Disease"))
       }
       
       ## Alzheimer's Disease and GREAT
@@ -485,23 +451,21 @@ server <- function(input, output, session) {
         colnames(db) <- c("Sensitivity", "Specificity", "Precision", "Prioritization")
         db$Samples <- samplenames
         db_gather <- gather(db, Metric, Value, -Samples)
-        ggplot(data = db_gather,
+        print(ggplot(data = db_gather,
                mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
           geom_boxplot(varwidth = TRUE) +
-          labs(x= "GREAT", y= "Alzheimer's Disease")
+          labs(x= "GREAT", y= "Alzheimer's Disease"))
       }
     }
   }
     
     
-  ## Deploying function for plotting at the click of the action button.
+  ## Deploying function for plotting.
     
-    output$userplot <- renderPlot(
+    output$studyplot <- renderPlot(
       {
-        # Take a dependency on 'input$submit'. This will run once initially, because the value changes from NULL to 0.
-       input$submit
        for_plot()
-      }, height = 500, width = 1000)
+      }, height = 500, width = 900)
     
 }
 
