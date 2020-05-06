@@ -8,13 +8,14 @@
 
 
 library(shiny, shinythemes, shinydashboard)
-library(tidyr, ggplot, markdown)
+library(tidyr, ggplot)
+library(markdown)
 
 ## Main module.
 
   ui <- fluidPage(theme = shinytheme("united"),
                   titlePanel(div(column(width = 9, h2("GR-Shiny")), 
-                                 column(3, img(height = 100, width = 300, src = "labLogo.png")))),
+                                 column(3, img(height = 100, width = 200, src = "labLogo.png")))),
   br(),
   h5('This application allows analyzing a user defined dataset for ranking various enrichment tools for genomic regions.
    The current suite of tools include GREAT, Enrichr, Chipenrich, Broadenrich, Seq2pathway. However, only the latter 3 are available
@@ -25,26 +26,21 @@ library(tidyr, ggplot, markdown)
   sidebarLayout(
     
     sidebarPanel(
-      selectInput(inputId = "m", label = "Select a comparison metric for viewing plots from our benchmark dataset",
-                   choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
-                  selected = 'sn'),
+      checkboxGroupInput(inputId = "m", label = "Select a gold standard dataset",
+                         choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
+                                     "Alzheimer's Disease"='ad'),
+                         selected = 'cc'),
       br(),
-      radioButtons(inputId = "t", label = "Select a tool",
+      checkboxGroupInput(inputId = "t", label = "Select a GSA tool",
                    choices = c("Chipenrich"='ce', "Broadenrich"='be',  "Seq2pathway"='sy', "Enrichr"='er', "GREAT"='gt'),
                    selected = 'ce'),
       br(),
-      radioButtons(inputId = "d", label = "Select a disease",
-                   choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
-                               "Alzheimer's Disease"='ad'),
-                   selected = 'cc'),
+      checkboxGroupInput(inputId = "d", label = "Select a comparison metric",
+                         choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
+                         selected = 'sn'),
       br(),
-      helpText('Please upload the metadata for your benchmark dataset here. The file may be structured with the 
-               following variables (for reference): S.No., 	Experimental Method, 	Organism , Cell Type/Tissue, 	
-                Genome Version,Disease Target Pathway, Samples,	Replicates,	PMID, Publication Journal, 	
-                Publication Year, GSE, GSM, TF or histone mark, Cistrome ID, KEGG ID,	Metadata.'),
+      helpText(a("Click here to view a sample dataset", href="https://i.ibb.co/g9Nf8fs/testData.png")),
       br(),
-      helpText('However, the mandatory attributes include, Disease Target Pathway and GSM, as the samples will be
-               loaded and processed against the disease terms as available with the KEGG and GO ids (BP, CC, MF).'),
       fileInput(inputId = "bds", label = "Upload your benchmark dataset",
               accept = c(
                 "text/csv",
