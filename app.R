@@ -13,7 +13,7 @@ library(markdown)
 
 ## Main module.
 
-  ui <- fluidPage(theme = shinytheme("united"),
+  ui <- fluidPage(
                   titlePanel(div(column(width = 9, h2("GR-Shiny")), 
                                  column(3, img(height = 100, width = 200, src = "labLogo.png")))),
   br(),
@@ -23,71 +23,100 @@ library(markdown)
    comparison. The application returns the plot and values as a result.'),
   h5('This interactive module allows for reviewing the results from our current study of benchmark data as we formulated.'),  
   br(),
-  sidebarLayout(
-    
-    sidebarPanel(
-      checkboxGroupInput(inputId = "m", label = "Select a gold standard dataset",
-                         choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
-                                     "Alzheimer's Disease"='ad'),
-                         selected = 'cc'),
-      br(),
-      checkboxGroupInput(inputId = "t", label = "Select a GSA tool",
-                   choices = c("Chipenrich"='ce', "Broadenrich"='be',  "Seq2pathway"='sy', "Enrichr"='er', "GREAT"='gt'),
-                   selected = 'ce'),
-      br(),
-      checkboxGroupInput(inputId = "d", label = "Select a comparison metric",
-                         choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
-                         selected = 'sn'),
-      br(),
-      helpText(a("Click here to view a sample dataset", href="https://i.ibb.co/g9Nf8fs/testData.png")),
-      br(),
-      fileInput(inputId = "bds", label = "Upload your benchmark dataset",
-              accept = c(
-                "text/csv",
-                "tab/comma-separated-values,text/plain",
-                ".csv",
-                ".txt")),
-      tags$hr(), # Horizontal rule
-      checkboxInput(inputId = "header", label = "Header", TRUE),
-      actionButton(inputId = "submit", label="Submit", icon("fas fa-magic"))
-      ),
-    
-    
-    mainPanel(
+  tabsetPanel(
+    tabPanel("Review Results from our Study ", fluid = TRUE,     mainPanel(
       tabsetPanel(type = "pill",
-                   tabPanel("Dataset Reference",
-                            tags$iframe(style="height:1000px; width:100%; scrolling=yes", 
-                                        src="GSA_ChIP_Seq_Master_Table.pdf")), # Summary
-                   tabPanel("Preview", tableOutput(outputId = "contents")), # Show file contents.
+                  tabPanel("Dataset Reference",
+                           tags$iframe(style="height:1000px; width:100%; scrolling=yes", 
+                                       src="GSA_ChIP_Seq_Master_Table.pdf")), # Summary
                   tabPanel("Results", 
-                  tabsetPanel(type = "pill",
-                                  tabPanel("Dataset Plots",
-                                            conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 
-                                                                                                  height="500", 
-                                                                                                  width="1000",
-                                                                                                  align="center")),
-                                            conditionalPanel(condition = "input.m=='sp'", tags$img(src="Specificity_ggplot.jpeg",
-                                                                                                  height="500", 
-                                                                                                  width="1000",
-                                                                                                  align="center")),
-                                            conditionalPanel(condition = "input.m=='pr'", tags$img(src="Prioritization_ggplot.jpeg",
-                                                                                                   height="500", 
-                                                                                                   width="1000",
-                                                                                                   align="center")),
-                                            conditionalPanel(condition = "input.m=='pn'", tags$img(src="Precision_ggplot.jpeg",
-                                                                                                   height="500", 
-                                                                                                   width="1000",
-                                                                                                   align="center"))),     # Display plot
-                                  tabPanel("User Plots", plotOutput(outputId = "userplot", width = "100%")), # User selected plots,
-                                  tabPanel("ROC Plot",
+                           tabsetPanel(type = "pill",
+                                       tabPanel("Dataset Plots",
+                                                conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 
+                                                                                                       height="500", 
+                                                                                                       width="1000",
+                                                                                                       align="center")),
+                                                conditionalPanel(condition = "input.m=='sp'", tags$img(src="Specificity_ggplot.jpeg",
+                                                                                                       height="500", 
+                                                                                                       width="1000",
+                                                                                                       align="center")),
+                                                conditionalPanel(condition = "input.m=='pr'", tags$img(src="Prioritization_ggplot.jpeg",
+                                                                                                       height="500", 
+                                                                                                       width="1000",
+                                                                                                       align="center")),
+                                                conditionalPanel(condition = "input.m=='pn'", tags$img(src="Precision_ggplot.jpeg",
+                                                                                                       height="500", 
+                                                                                                       width="1000",
+                                                                                                       align="center"))),     # Display plot
+                                       tabPanel("ROC Plot",
                                                 tags$img(src="ROC_Plot.jpeg",
-                                                height="500",
-                                                width="1000",
-                                                align="center")))), # ROC Plot
-                    tabPanel("FAQ", includeMarkdown("www/faq.md"))
+                                                         height="500",
+                                                         width="1000",
+                                                         align="center")))) # ROC Plot
+      )),
+             sidebarLayout("", fluid = TRUE,
+               sidebarPanel(
+                 checkboxGroupInput(inputId = "m", label = "Select a gold standard dataset",
+                                    choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
+                                                "Alzheimer's Disease"='ad'),
+                                    selected = 'cc'),
+                 br(),
+                 checkboxGroupInput(inputId = "t", label = "Select a GSA tool",
+                                    choices = c("Chipenrich"='ce', "Broadenrich"='be',  "Seq2pathway"='sy', "Enrichr"='er', "GREAT"='gt'),
+                                    selected = 'ce'),
+                 br(),
+                 checkboxGroupInput(inputId = "d", label = "Select a comparison metric",
+                                    choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
+                                    selected = 'sn'),
+                 br(),
+                 actionButton(inputId = "submit", label="Submit")
+             )
+    )),
+    tabPanel("Analyze Data", fluid = TRUE,     mainPanel(
+      tabsetPanel(type = "pill",
+                  tabPanel("Preview", tableOutput(outputId = "contents")), # Show file contents.
+                  tabPanel("Results", 
+                           tabsetPanel(type = "pill",
+                                       tabPanel("Dataset Plots", plotOutput(outputId = "userplot", width = "100%")), # User selected plots,
+                                       tabPanel("ROC Plot",
+                                                tags$img(src="ROC_Plot.jpeg",
+                                                         height="500",
+                                                         width="1000",
+                                                         align="center")))) # ROC Plot
+      )),
+             sidebarLayout("", fluid = TRUE,
+               sidebarPanel(
+                 checkboxGroupInput(inputId = "m", label = "Select a gold standard dataset",
+                                    choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
+                                                "Alzheimer's Disease"='ad'),
+                                    selected = 'cc'),
+                 br(),
+                 checkboxGroupInput(inputId = "t", label = "Select a GSA tool",
+                                    choices = c("Chipenrich"='ce', "Broadenrich"='be',  "Seq2pathway"='sy', "Enrichr"='er', "GREAT"='gt'),
+                                    selected = 'ce'),
+                 br(),
+                 checkboxGroupInput(inputId = "d", label = "Select a comparison metric",
+                                    choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
+                                    selected = 'sn'),
+                 br(),
+                 helpText(a("Click here to view a sample dataset", href="https://i.ibb.co/g9Nf8fs/testData.png")),
+                 br(),
+                 fileInput(inputId = "bds", label = "Upload your benchmark dataset",
+                           accept = c(
+                             "text/csv",
+                             "tab/comma-separated-values,text/plain",
+                             ".csv",
+                             ".txt")),
+                 tags$hr(), # Horizontal rule
+                 checkboxInput(inputId = "header", label = "Header", TRUE),
+                 actionButton(inputId = "submit", label="Submit")
+             )
     )
-  
-  )))
+  ),
+  tabPanel("Frequently Asked Questions", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/faq.md")))),
+  tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md")))))
+    
+)
 
 # Server logic 
 server <- function(input, output, session) {
