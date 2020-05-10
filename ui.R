@@ -1,0 +1,105 @@
+shinyUI(fluidPage(theme = shinytheme("united"),
+                titlePanel(div(column(width = 9, h2("GR-Shiny")), 
+                               column(3, img(height = 100, width = 200, src = "labLogo.png")))),
+                br(),
+                h5('This application allows analyzing a user defined dataset for ranking various enrichment tools for genomic regions.
+   The current suite of tools include GREAT, Enrichr, Chipenrich, Broadenrich, Seq2pathway. However, only the latter 3 are available
+   as functions in R and hence form a part of this interface. The user is required to select the dataset, tool, and the metric of
+   comparison. The application returns the plot and values as a result.'),
+                h5('This interactive module allows for reviewing the results from our current study of benchmark data as we formulated.'),  
+                br(),
+                tabsetPanel(
+                  tabPanel("Review Results from our Study ", fluid = TRUE, 
+                           mainPanel(
+                             tabsetPanel(type = "pill",
+                                         tabPanel("Dataset Reference",
+                                                  tags$iframe(style="height:1000px; width:100%; scrolling=yes", 
+                                                              src="GSA_ChIP_Seq_Master_Table.pdf")), # Summary
+                                         tabPanel("Results", 
+                                                  tabsetPanel(type = "pill",
+                                                              tabPanel("Plots on relative performance",
+                                                                       h5("Please select a Comparison metric from the right panel."),
+                                                                       conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 
+                                                                                                                              height="500", 
+                                                                                                                              width="900",
+                                                                                                                              align="center")),
+                                                                       conditionalPanel(condition = "input.m=='sp'", tags$img(src="Specificity_ggplot.jpeg",
+                                                                                                                              height="500", 
+                                                                                                                              width="900",
+                                                                                                                              align="center")),
+                                                                       conditionalPanel(condition = "input.m=='pr'", tags$img(src="Prioritization_ggplot.jpeg",
+                                                                                                                              height="500", 
+                                                                                                                              width="900",
+                                                                                                                              align="center")),
+                                                                       conditionalPanel(condition = "input.m=='pn'", tags$img(src="Precision_ggplot.jpeg",
+                                                                                                                              height="500", 
+                                                                                                                              width="900",
+                                                                                                                              align="center"))),     # Display plot
+                                                              tabPanel("Plots on Overall Performance",
+                                                                       h5("Please select a GSA tool and a Gold Standard dataset from the right panel."),
+                                                                       plotOutput(outputId = "studyplot", width = "100%") %>% withSpinner(color="#FF5733", type = 4, size = 0.25)),
+                                                              tabPanel("ROC Plot",
+                                                                       tags$img(src="ROC_Plot.jpeg",
+                                                                                height="500",
+                                                                                width="900",
+                                                                                align="center")))) # ROC Plot
+                             )),
+                           sidebarLayout("", fluid = TRUE,
+                                         sidebarPanel(
+                                           radioButtons(inputId = "d", label = "Select a Gold Standard dataset",
+                                                        choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
+                                                                    "Alzheimer's Disease"='ad'),
+                                                        selected = 'cc'),
+                                           br(),
+                                           radioButtons(inputId = "t", label = "Select a GSA tool",
+                                                        choices = c("Chipenrich"='ce', "Broadenrich"='be',  "Seq2pathway"='sy', "Enrichr"='er', "GREAT"='gt'),
+                                                        selected = 'ce'),
+                                           br(),
+                                           radioButtons(inputId = "m", label = "Select a Comparison Metric",
+                                                        choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
+                                                        selected = 'sn'),
+                                           br(),
+                                           submitButton("View")
+                                         )
+                           )),
+                  tabPanel("Analyze Data", fluid = TRUE, mainPanel(tabsetPanel(type = "pill",
+                                                                               tabPanel("Preview Data"), # Summary
+                                                                               tabPanel("Results"),
+                                                                               tabPanel("Download")
+                  )),
+                  sidebarLayout("", fluid = TRUE,
+                                sidebarPanel(
+                                  
+                                  textInput("loc", "Enter path (Relative/Absolute)",
+                                            value = ""),
+                                  submitButton("Upload"),
+                               
+                                  helpText("For details on file structuring, visit the FAQ section."),
+                                  
+                                  br(),
+                                  verbatimTextOutput("upload") %>% withSpinner(color="#FF5733", type = 4, size = 0.25),
+                                           
+                                  br(),
+                                  checkboxGroupInput(inputId = "cbt", label = "Select GSA tool(s)",
+                                                     choices = c("Chipenrich"='executeChipenrich', "Broadenrich"='executeBroadenrich',  "Seq2pathway"='executeSeq2pathway')),
+                                                     
+                                  br(),
+                                  checkboxGroupInput(inputId = "cbm", label = "Select Comparison Metric(s)",
+                                                     choices = c("Sensitivity"='cbsn', "Specificity"='cbsp',  "Precision"='cbpr',
+                                                                 "Prioritization"='cbpn')),
+                                  br(),
+                                  
+                                  checkboxGroupInput(inputId = "cbd", label = "Select Gold Standard dataset(s)",
+                                                     choices = c("Colorectal Cancer"='cbcc', "Prostate Cancer"='cbpc',  "Gastric Cancer"='cbgc',
+                                                                 "Alzheimer's Disease"='cbad')),
+
+                                  submitButton("Execute"),
+                                  br(),
+                                  verbatimTextOutput("tools") %>% withSpinner(color="#FF5733", type = 4, size = 0.25)
+                                  
+                                  
+                  ))),
+                  tabPanel("Frequently Asked Questions", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/faq.md")))),
+                  tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md")))))
+                
+))
