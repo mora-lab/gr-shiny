@@ -1,11 +1,16 @@
 ## Setting up the global environment
 ## Installing and Loading libraries.
 
-# if (!requireNamespace("BiocManager", quietly = TRUE))
-#   install.packages("BiocManager")
-# 
-# BiocManager::install(c("devtools", "GenomicRanges", "shiny", "shinythemes", "shinyjs", 
-# "tidyr", "ggplot2", "markdown", "shinydashboard", "shinycssloaders", "seq2pathway", "chipenrich"))
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+requiredPackages <- c("devtools", "GenomicRanges", "shiny", "shinythemes", "shinyjs",
+                      "tidyr", "ggplot2", "markdown", "shinydashboard", "shinycssloaders", 
+                      "seq2pathway", "chipenrich")
+
+newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
+if(length(newPackages)) BiocManager::install(newPackages)
+
 
 library(shinycssloaders)
 library(shiny)
@@ -23,4 +28,13 @@ library(chipenrich)
 
 options(shiny.maxRequestSize = 100*1024^2) ## Setting maximum upload size to 100 Mb.
 source("./R/appFunctions.R") ## loading function definitions
-system("mkdir ./data/results")
+
+## Creating results directory
+if(!dir.exists("./data/results")) dir.create("./data/results") else NULL
+
+
+## Defining lists to hold user-selected tools and gold-datasets.
+toolsResults <- c()
+diseasePools <- c()
+
+

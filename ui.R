@@ -70,7 +70,7 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                   sidebarLayout("", fluid = TRUE,
                                 sidebarPanel(
                                   
-                                  textInput("loc", "Enter path (Relative/Absolute)",
+                                  textInput("loc", "1. Enter path (Relative/Absolute)",
                                             value = ""),
                                   submitButton("Upload"),
                                
@@ -80,23 +80,23 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                                   verbatimTextOutput("upload") %>% withSpinner(color="#FF5733", type = 4, size = 0.25),
                                            
                                   br(),
-                                  checkboxGroupInput(inputId = "cbt", label = "Select GSA tool(s)",
+                                  checkboxGroupInput(inputId = "cbt", label = "2. Select GSA tool(s)",
                                                      choices = c("Chipenrich"='executeChipenrich', "Broadenrich"='executeBroadenrich',  "Seq2pathway"='executeSeq2pathway')),
                                                      
                                   br(),
-                                  checkboxGroupInput(inputId = "cbm", label = "Select Comparison Metric(s)",
-                                                     choices = c("Sensitivity"='cbsn', "Specificity"='cbsp',  "Precision"='cbpr',
-                                                                 "Prioritization"='cbpn')),
-                                  br(),
-                                  
-                                  checkboxGroupInput(inputId = "cbd", label = "Select Gold Standard dataset(s)",
-                                                     choices = c("Colorectal Cancer"='cbcc', "Prostate Cancer"='cbpc',  "Gastric Cancer"='cbgc',
-                                                                 "Alzheimer's Disease"='cbad')),
-
                                   submitButton("Execute"),
                                   br(),
-                                  verbatimTextOutput("tools") %>% withSpinner(color="#FF5733", type = 4, size = 0.25)
+                                  verbatimTextOutput("tools") %>% withSpinner(color="#FF5733", type = 4, size = 0.25),
+                                  br(),
                                   
+                                  checkboxGroupInput(inputId = "cbd", label = "3. Select Gold Standard dataset(s)",
+                                                     choices = c("Colorectal Cancer"='loadcc', "Prostate Cancer"='loadpc',  "Gastric Cancer"='loadgc',
+                                                                 "Alzheimer's Disease"='loadad')),
+                                  br(),
+                                  submitButton("Load"),
+                                  br(),
+                                  verbatimTextOutput("disease") %>% withSpinner(color="#FF5733", type = 4, size = 0.25),
+                                  br()
                                   
                   ))),
                   tabPanel("Frequently Asked Questions", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/faq.md")))),

@@ -3,6 +3,13 @@ shinyServer(function(input, output, session){
   
   source("global.R")
   
+  ## Defining variables to represent disease terms
+  alzheimersDiseasePool <- c()
+  colorectalCancerPool <- c()
+  gastricCancerPool <- c()
+  prostateCancerPool <- c()
+  
+  
   ## Display the contents of the table in the main panel.  
   output$contents <- renderTable({
     if (is.null(input$bds))
@@ -401,5 +408,16 @@ shinyServer(function(input, output, session){
     sapply(input$cbt, do.call, args = list(dataFolder)) 
     return("Done.")
   })
+  
+  
+  ## Activating disease definitions
+  
+  output$disease <- renderText({
+    diseaseTerms()
+    sapply(input$cbd, do.call, args = list()) 
+    return("Disease definitions loaded.")
+  })  
+  
+  
   
 })

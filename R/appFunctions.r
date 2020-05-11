@@ -335,7 +335,7 @@ executeSeq2pathway <- function(loc){
     seq2pathwayResults[[i]] <- seq2pathwayRun(regeneratedSamples[[i]])
   }
   
-  system("mkdir ./data/results/Seq2pathway")
+  dir.create("./data/results/Seq2pathway")
   saveRDS(seq2pathwayResults, file = "./data/results/Seq2pathway/seq2pathwayResults")
   rm(seq2pathwayResults)
   
@@ -352,6 +352,7 @@ executeSeq2pathway <- function(loc){
   }
   names(seq2pathwayResultsShredded)<- as.character(ChIPSeqSamples)
   saveRDS(seq2pathwayResultsShredded, file = "./data/results/Seq2pathway/seq2pathwayResultsShredded")
+  toolsResults <<- append(toolsResults, "seq2pathwayResultsShredded")
   rm(seq2pathwayResults)
 }
 
@@ -376,7 +377,7 @@ executeChipenrich <- function(loc){
   {
     chipenrichResults[[i]] <- chipenrichRun(paste0(loc,paste0(eval(parse(text="ChIPSeqSamples[i]")),".bed")))
   }
-  system("mkdir ./data/results/Chipenrich")
+  dir.create("./data/results/Chipenrich")
   saveRDS(chipenrichResults, file = "./data/results/Chipenrich/chipenrichResults")
   rm(chipenrichResults)
   
@@ -391,6 +392,7 @@ executeChipenrich <- function(loc){
   }
   names(chipenrichResultsShredded) <- as.character(ChIPSeqSamples)
   saveRDS(chipenrichResultsShredded, file = "./data/results/Chipenrich/chipenrichResultsShredded")
+  toolsResults <<- append(toolsResults, "chipenrichResultsShredded")
   rm(chipenrichResults)
 }
 
@@ -418,7 +420,7 @@ executeBroadenrich <- function(loc){
   {
     broadenrichResults[[i]] <- broadenrichRun(paste0(loc,paste0(eval(parse(text="ChIPSeqSamples[i]")),".bed")))
   }
-  system("mkdir ./data/results/Broadenrich")
+  dir.create("./data/results/Broadenrich")
   saveRDS(broadenrichResults, file = "./data/results/Broadenrich/broadenrichResults")
   rm(broadenrichResults)
   
@@ -433,8 +435,14 @@ executeBroadenrich <- function(loc){
   }
   names(broadenrichResultsShredded) <- as.character(ChIPSeqSamples)
   saveRDS(broadenrichResultsShredded, file = "./data/results/Broadenrich/broadenrichResultsShredded")
+  toolsResults <<- append(toolsResults, "broadenrichResultsShredded") 
   rm(broadenrichResults)
 }
 
 
+## Loading disease definitions
 
+loadcc <- function() { colorectalCancerPool <<- readRDS("./data/colorectalCancerPool"); diseasePools <<- append(diseasePools, "colorectalCancerPool")}
+loadpc <- function() { prostateCancerPool <<- readRDS("./data/prostateCancerPool"); diseasePools <<- append(diseasePools, "prostateCancerPool")}
+loadgc <- function() { gastricCancerPool <<- readRDS("./data/gastricCancerPool"); diseasePools <<- append(diseasePools, "gastricCancerPool")}
+loadad <- function() { alzheimersDiseasePool <<- readRDS("./data/alzheimersDiseasePool"); diseasePools <<- append(diseasePools, "alzheimersDiseasePool")}
