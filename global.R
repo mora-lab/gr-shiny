@@ -6,12 +6,12 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
 requiredPackages <- c("devtools", "GenomicRanges", "shiny", "shinythemes", "shinyjs",
                       "tidyr", "ggplot2", "markdown", "shinydashboard", "shinycssloaders", 
-                      "seq2pathway", "chipenrich")
+                      "seq2pathway", "chipenrich", "shinyFiles")
 
 newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
 if(length(newPackages)) BiocManager::install(newPackages)
 
-
+library(shinyFiles)
 library(shinycssloaders)
 library(shiny)
 library(shinythemes)
@@ -36,5 +36,3 @@ if(!dir.exists("./data/results")) dir.create("./data/results") else NULL
 ## Defining lists to hold user-selected tools and gold-datasets.
 toolsResults <- c()
 diseasePools <- c()
-
-

@@ -69,11 +69,11 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                   )),
                   sidebarLayout("", fluid = TRUE,
                                 sidebarPanel(
+                                  p("1. Select Path"),
+                                  shinyFilesButton('files','Folder select','Please select a BED file', multiple =  FALSE,
+                                                   class = NULL, buttonType = "default"),
+                                  verbatimTextOutput('filepaths'),
                                   
-                                  textInput("loc", "1. Enter path (Relative/Absolute)",
-                                            value = ""),
-                                  submitButton("Upload"),
-                               
                                   helpText("For details on file structuring, visit the FAQ section."),
                                   
                                   br(),

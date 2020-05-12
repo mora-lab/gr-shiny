@@ -391,21 +391,27 @@ shinyServer(function(input, output, session){
     }, height = 500, width = 900)
   
   
+  dataFolder <- NULL ## directory path
+  ChIPSeqSamples <- c() ## list of sample names
+  
   ## Validating path and confirming upload
+
+  output$filepaths <- renderText({
+    shinyFileChoose(input, "files", roots= getVolumes(), session=session, filetypes=c('','bed'))
+    dataFolder <<- paste0(dirname(parseFilePaths(roots=getVolumes(), input$files)$datapath), "/") ## Store folder location
+    return(dataFolder)
+    })
   
     output$upload <- renderText({
-    dataFolder <- trimws(as.character(input$loc))  ## trim trailing spaces in the path
     dataImportClean(dataFolder)
     return("Samples retrieved successfully.")
-    #return(length(list.files("./demoData/")))
   })
   
   
   ## Executing tools as per user selection 
   
   output$tools <- renderText({
-    dataFolder <- trimws(as.character(input$loc))
-    sapply(input$cbt, do.call, args = list(dataFolder)) 
+    sapply(input$cbt, do.call, args = list(dataFolder))
     return("Done.")
   })
   
@@ -414,10 +420,7 @@ shinyServer(function(input, output, session){
   
   output$disease <- renderText({
     diseaseTerms()
-    sapply(input$cbd, do.call, args = list()) 
+    sapply(input$cbd, do.call, args = list())
     return("Disease definitions loaded.")
-  })  
-  
-  
-  
+  })
 })
