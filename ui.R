@@ -1,5 +1,6 @@
 shinyUI(fluidPage(theme = shinytheme("united"),
-                titlePanel(div(column(width = 9, h2("GR-Shiny")), 
+                titlePanel(windowTitle ="GR-Shiny | Mora Lab | GMU",
+                  div(column(width = 9, h2("GR-Shiny")), 
                                column(3, img(height = 100, width = 200, src = "labLogo.png")))),
                 br(),
                 h5('This application allows analyzing a user defined dataset for ranking various enrichment tools for genomic regions.
@@ -69,7 +70,8 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                   )),
                   sidebarLayout("", fluid = TRUE,
                                 sidebarPanel(
-                                  p("1. Select Path"),
+                                  tags$strong("1. Select Path"),
+                                  br(),
                                   shinyFilesButton('files','Folder select','Please select a BED file', multiple =  FALSE,
                                                    class = NULL, buttonType = "default"),
                                   verbatimTextOutput('filepaths'),
