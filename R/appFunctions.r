@@ -41,14 +41,11 @@ return(listToFrame(forPrioritization))
 ## output. While the empty cells mean that the output for the particular sample was not available.
 
 
-
-calculateSensitivitySpecificityPrecision <- function(tool)
-  {
-  forPrecision <- vector("list", length(ChIPSeqSamples))
+calculateSensitivity <- function(tool)
+{
   forSensitivity <- vector("list", length(ChIPSeqSamples)) 
-  forSpecificity <- vector("list", length(ChIPSeqSamples)) 
-
-  ## Classical Sensitivity, Specificity, Precision
+  
+  ## Classical Sensitivity
   
   for (sam in 1:length(ChIPSeqSamples))
   {
@@ -60,38 +57,129 @@ calculateSensitivitySpecificityPrecision <- function(tool)
       falsePositives2IDs <- list()
       falsePositives <- list()
       falseNegatives <- list()
-    
-    ## Tool results' subsets on the basis of statistical significance.
-    greaterThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] > 0.05),]
-    lessThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] <= 0.05),]
-    trueNegativesIDs <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
-    
-    falsePositives1IDs <- intersect(eval(parse(text=diseasePools[dis])),greaterThan0.05[[1]])
-    falsePositives2IDs <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
-    
-    falsePositives <- c(falsePositives1IDs,falsePositives2IDs)
-    truePositives <- intersect(lessThan0.05[[1]], eval(parse(text=diseasePools[dis])))
-    falseNegatives <- intersect(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis])))
-    
-    ## Results
-    
-    precision <- length(truePositives)/(length(truePositives)+length(falsePositives))
-    sensitivity <- length(truePositives)/(length(truePositives)+length(falseNegatives))
-    specificity <- length(trueNegativesIDs)/(length(trueNegativesIDs)+length(falsePositives))
-
-    # Store results
-    forPrecision[[sam]][dis] <- precision
-    forSensitivity[[sam]][dis] <- sensitivity
-    forSpecificity[[sam]][dis] <- specificity
-
+      
+      ## Tool results' subsets on the basis of statistical significance.
+      greaterThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] > 0.05),]
+      lessThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] <= 0.05),]
+      trueNegativesIDs <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
+      
+      falsePositives1IDs <- intersect(eval(parse(text=diseasePools[dis])),greaterThan0.05[[1]])
+      falsePositives2IDs <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
+      
+      falsePositives <- c(falsePositives1IDs,falsePositives2IDs)
+      truePositives <- intersect(lessThan0.05[[1]], eval(parse(text=diseasePools[dis])))
+      falseNegatives <- intersect(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis])))
+      
+      ## Results
+      
+      sensitivity <- length(truePositives)/(length(truePositives)+length(falseNegatives))
+      
+      # Store results
+      
+      forSensitivity[[sam]][dis] <- sensitivity
+      
     }
   } 
   
   ## Let's return a list for convenience; a list of dataframes.
-  masterReturn <- list(listToFrame(forSensitivity), listToFrame(forSpecificity), listToFrame(forPrecision))
-  return(masterReturn)
+  
+  return(listToFrame(forSensitivity))
 }
 
+
+calculateSpecificity <- function(tool)
+{
+  
+  forSpecificity <- vector("list", length(ChIPSeqSamples)) 
+  
+  ## Classical Specificity
+  
+  for (sam in 1:length(ChIPSeqSamples))
+  {
+    for (dis in 1:length(diseasePools))
+    {
+      truePositives <- list()
+      trueNegativesIDs <- list()
+      falsePositives1IDs <- list()
+      falsePositives2IDs <- list()
+      falsePositives <- list()
+      falseNegatives <- list()
+      
+      ## Tool results' subsets on the basis of statistical significance.
+      greaterThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] > 0.05),]
+      lessThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] <= 0.05),]
+      trueNegativesIDs <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
+      
+      falsePositives1IDs <- intersect(eval(parse(text=diseasePools[dis])),greaterThan0.05[[1]])
+      falsePositives2IDs <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
+      
+      falsePositives <- c(falsePositives1IDs,falsePositives2IDs)
+      truePositives <- intersect(lessThan0.05[[1]], eval(parse(text=diseasePools[dis])))
+      falseNegatives <- intersect(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis])))
+      
+      ## Results
+      
+      specificity <- length(trueNegativesIDs)/(length(trueNegativesIDs)+length(falsePositives))
+      
+      # Store results
+      
+      forSpecificity[[sam]][dis] <- specificity
+      
+    }
+  } 
+  
+  ## Let's return a list for convenience; a list of dataframes.
+  
+  return(listToFrame(forSpecificity))
+  
+}
+
+
+calculatePrecision <- function(tool)
+{
+  forPrecision <- vector("list", length(ChIPSeqSamples))
+  
+  ## Classical Precision
+  
+  for (sam in 1:length(ChIPSeqSamples))
+  {
+    for (dis in 1:length(diseasePools))
+    {
+      truePositives <- list()
+      trueNegativesIDs <- list()
+      falsePositives1IDs <- list()
+      falsePositives2IDs <- list()
+      falsePositives <- list()
+      falseNegatives <- list()
+      
+      ## Tool results' subsets on the basis of statistical significance.
+      greaterThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] > 0.05),]
+      lessThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] <= 0.05),]
+      trueNegativesIDs <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
+      
+      falsePositives1IDs <- intersect(eval(parse(text=diseasePools[dis])),greaterThan0.05[[1]])
+      falsePositives2IDs <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
+      
+      falsePositives <- c(falsePositives1IDs,falsePositives2IDs)
+      truePositives <- intersect(lessThan0.05[[1]], eval(parse(text=diseasePools[dis])))
+      falseNegatives <- intersect(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis])))
+      
+      ## Results
+      
+      precision <- length(truePositives)/(length(truePositives)+length(falsePositives))
+      
+      # Store results
+      
+      forPrecision[[sam]][dis] <- precision
+      
+    }
+  } 
+  
+  ## Let's return a list for convenience; a list of dataframes.
+  
+  return(listToFrame(forPrecision))
+  
+}
 
 
 
@@ -100,17 +188,16 @@ dataImportClean <- function(loc){
     ### Importing the master table ###
     
     setwd(".")
-    proj_set()
 
     ## The following code creates a list of samples for which we need to extract the BED files for.
     
     
-    ChIPSeqSamples <- list.files(loc) # Extracting files from the input directory.
-    ChIPSeqSamples <- substr(ChIPSeqSamples,1,nchar(ChIPSeqSamples)-4) # Clipping file extension to retrieve sample names only.
+    ChIPSeqSamples <<- list.files(loc) # Extracting files from the input directory.
+    ChIPSeqSamples <<- substr(ChIPSeqSamples,1,nchar(ChIPSeqSamples)-4) # Clipping file extension to retrieve sample names only.
     
     ## Initializing list for storing BED files and the consecutive GRanges objects.
     
-    samplesInBED = list()
+    samplesInBED <- list()
     
     for(i in 1:length(ChIPSeqSamples))
     {
@@ -341,16 +428,15 @@ executeSeq2pathway <- function(loc){
   
   ## Pruning the irrelevant results from Seq2pathway
   
-  seq2pathwayResultsShredded <- list()
   seq2pathwayResults <- readRDS("./data/results/Seq2pathway/seq2pathwayResults")
   
   for (i in 1:length(seq2pathwayResults))
   {
-    seq2pathwayResultsShredded[[i]] <- rbind(seq2pathwayResults[[i]][[i]]$gene2pathway_result.FET$GO_BP[,c(1,3)],
+    seq2pathwayResultsShredded[[i]] <<- rbind(seq2pathwayResults[[i]][[i]]$gene2pathway_result.FET$GO_BP[,c(1,3)],
                                              seq2pathwayResults[[i]][[i]]$gene2pathway_result.FET$GO_CC[,c(1,3)],
                                              seq2pathwayResults[[i]][[i]]$gene2pathway_result.FET$GO_MF[,c(1,3)])
   }
-  names(seq2pathwayResultsShredded)<- as.character(ChIPSeqSamples)
+  names(seq2pathwayResultsShredded) <<- as.character(ChIPSeqSamples)
   saveRDS(seq2pathwayResultsShredded, file = "./data/results/Seq2pathway/seq2pathwayResultsShredded")
   toolsResults <<- append(toolsResults, "seq2pathwayResultsShredded")
   rm(seq2pathwayResults)
@@ -383,14 +469,13 @@ executeChipenrich <- function(loc){
   
   ## Chipenrich
   
-  chipenrichResultsShredded <- list()
   chipenrichResults <- readRDS("./data/results/Chipenrich/chipenrichResults")
   for(i in 1:length(chipenrichResults))
   {
-    chipenrichResultsShredded[[i]] <- chipenrichResults[[i]][[i]]$results[,c(2,4)]
+    chipenrichResultsShredded[[i]] <<- chipenrichResults[[i]][[i]]$results[,c(2,4)]
     
   }
-  names(chipenrichResultsShredded) <- as.character(ChIPSeqSamples)
+  names(chipenrichResultsShredded) <<- as.character(ChIPSeqSamples)
   saveRDS(chipenrichResultsShredded, file = "./data/results/Chipenrich/chipenrichResultsShredded")
   toolsResults <<- append(toolsResults, "chipenrichResultsShredded")
   rm(chipenrichResults)
@@ -426,14 +511,13 @@ executeBroadenrich <- function(loc){
   
   ## Broadenrich
   
-  broadenrichResultsShredded <- list()
   broadenrichResults <- readRDS("./data/results/Broadenrich/broadenrichResults")
   for(i in 1:length(broadenrichResults))
   {
-    broadenrichResultsShredded[[i]] <- broadenrichResults[[i]][[i]]$results[,c(2,4)]
+    broadenrichResultsShredded[[i]] <<- broadenrichResults[[i]][[i]]$results[,c(2,4)]
     
   }
-  names(broadenrichResultsShredded) <- as.character(ChIPSeqSamples)
+  names(broadenrichResultsShredded) <<- as.character(ChIPSeqSamples)
   saveRDS(broadenrichResultsShredded, file = "./data/results/Broadenrich/broadenrichResultsShredded")
   toolsResults <<- append(toolsResults, "broadenrichResultsShredded") 
   rm(broadenrichResults)
@@ -446,3 +530,68 @@ loadcc <- function() { colorectalCancerPool <<- readRDS("./data/colorectalCancer
 loadpc <- function() { prostateCancerPool <<- readRDS("./data/prostateCancerPool"); diseasePools <<- append(diseasePools, "prostateCancerPool")}
 loadgc <- function() { gastricCancerPool <<- readRDS("./data/gastricCancerPool"); diseasePools <<- append(diseasePools, "gastricCancerPool")}
 loadad <- function() { alzheimersDiseasePool <<- readRDS("./data/alzheimersDiseasePool"); diseasePools <<- append(diseasePools, "alzheimersDiseasePool")}
+
+
+## Calculating metrics for all selected tools
+## Prioritization
+
+runPrioritization <- function() {
+  consolidatedPrioritization <<- lapply(1:length(toolsResults), calculatePrioritization)
+  
+  ## For easy access, we shall name the list elements by tool names as they are in correspondence.
+  
+  names(consolidatedPrioritization) <<- toolsResults
+  
+  ## The resulting prioritization values are as follows. As noticeable, these have been calculated for each sample, 
+  ## across given target pathways for each tool.
+  
+  saveRDS(consolidatedPrioritization, "./data/results/consolidatedPrioritization")
+}
+
+
+## Precision
+
+runPrecision <- function() {
+  consolidatedPrecision <<- lapply(1:length(toolsResults), calculatePrecision)
+  
+  ## For easy access, we shall name the list elements by tool names as they are in correspondence.
+  
+  names(consolidatedPrecision) <<- toolsResults
+  
+  ## The resulting prioritization values are as follows. As noticeable, these have been calculated for each sample, 
+  ## across given target pathways for each tool.
+  
+  saveRDS(consolidatedPrecision, "./data/results/consolidatedPrecision")
+}
+
+
+##Sensitivity
+
+runSensitivity <- function() {
+  consolidatedSensitivity <<- lapply(1:length(toolsResults), calculateSensitivity)
+  
+  ## For easy access, we shall name the list elements by tool names as they are in correspondence.
+  
+  names(consolidatedSensitivity) <<- toolsResults
+  
+  ## The resulting prioritization values are as follows. As noticeable, these have been calculated for each sample, 
+  ## across given target pathways for each tool.
+  
+  saveRDS(consolidatedSensitivity, "./data/results/consolidatedSensitivity")
+}
+
+
+##Specificity
+
+runSpecificity <- function() {
+  consolidatedSpecificity <<- lapply(1:length(toolsResults), calculateSpecificity)
+  
+  ## For easy access, we shall name the list elements by tool names as they are in correspondence.
+  
+  names(consolidatedSpecificity) <<- toolsResults
+  
+  ## The resulting prioritization values are as follows. As noticeable, these have been calculated for each sample, 
+  ## across given target pathways for each tool.
+  
+  saveRDS(consolidatedSpecificity, "./data/results/consolidatedSpecificity")
+}
