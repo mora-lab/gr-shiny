@@ -6,12 +6,11 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 
 requiredPackages <- c("devtools", "GenomicRanges", "shiny", "shinythemes", "shinyjs",
                       "tidyr", "ggplot2", "markdown", "shinydashboard", "shinycssloaders", 
-                      "seq2pathway", "chipenrich", "shinyFiles")
+                      "seq2pathway", "chipenrich")
 
 newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
 if(length(newPackages)) BiocManager::install(newPackages)
 
-library(shinyFiles)
 library(shinycssloaders)
 library(shiny)
 library(shinythemes)
@@ -33,6 +32,29 @@ source("./R/appFunctions.R") ## loading function definitions
 if(!dir.exists("./data/results")) dir.create("./data/results") else NULL
 
 
-## Defining lists to hold user-selected tools and gold-datasets.
+## Defining variables to represent disease terms
+
+alzheimersDiseasePool <- c()
+colorectalCancerPool <- c()
+gastricCancerPool <- c()
+prostateCancerPool <- c()
+
+## Defining lists to hold user-selected tools and gold-datasets
+
 toolsResults <- c()
 diseasePools <- c()
+
+
+## Defining normalized results for different tools
+
+chipenrichResultsShredded <- list()
+broadenrichResultsShredded <- list()
+seq2pathwayResultsShredded <- list()
+
+
+## Our parent list
+
+consolidatedSpecificity <- vector("list", length = length(toolsResults))
+consolidatedSensitivity <- vector("list", length = length(toolsResults))
+consolidatedPrecision <- vector("list", length = length(toolsResults))
+consolidatedPrioritization <- vector("list", length = length(toolsResults))

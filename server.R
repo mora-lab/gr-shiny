@@ -3,12 +3,6 @@ shinyServer(function(input, output, session){
   
   source("global.R")
   
-  ## Defining variables to represent disease terms
-  alzheimersDiseasePool <- c()
-  colorectalCancerPool <- c()
-  gastricCancerPool <- c()
-  prostateCancerPool <- c()
-  
   
   ## Display the contents of the table in the main panel.  
   output$contents <- renderTable({
@@ -395,32 +389,47 @@ shinyServer(function(input, output, session){
   ChIPSeqSamples <- c() ## list of sample names
   
   ## Validating path and confirming upload
-
-  output$filepaths <- renderText({
-    shinyFileChoose(input, "files", roots= getVolumes(), session=session, filetypes=c('','bed'))
-    dataFolder <<- paste0(dirname(parseFilePaths(roots=getVolumes(), input$files)$datapath), "/") ## Store folder location
-    return(dataFolder)
-    })
+    
+  # output$filepaths <- renderText({
+    # shinyFileChoose(input, "files", roots= getVolumes(), session=session, filetypes=c('','bed'))
+    # dataFolder <<- paste0(dirname(parseFilePaths(roots=getVolumes(), input$files)$datapath), "/") ## Store folder location
+    
+    # return(dataFolder)
+    # })
   
+  observeEvent(input$files, {
     output$upload <- renderText({
-    dataImportClean(dataFolder)
-    return("Samples retrieved successfully.")
+        dataFolder <<- input$files
+        dataImportClean(dataFolder)
+        return("Samples retrieved successfully.")
+      })
   })
-  
   
   ## Executing tools as per user selection 
   
-  output$tools <- renderText({
-    sapply(input$cbt, do.call, args = list(dataFolder))
-    return("Done.")
-  })
+  observeEvent(input$cbt, {
+    output$tools <- renderText({
+      sapply(input$cbt, do.call, args = list(dataFolder))
+      return("Done. Results saved.")
+    })
+})
   
   
   ## Activating disease definitions
-  
-  output$disease <- renderText({
-    diseaseTerms()
-    sapply(input$cbd, do.call, args = list())
-    return("Disease definitions loaded.")
+  observeEvent(input$cbd, {
+    output$disease <- renderText({
+      diseaseTerms()
+      sapply(input$cbd, do.call, args = list())
+      return("Disease definitions loaded.")
+      })
   })
+  
+  ## Calculating comparison metrics
+  observeEvent(input$cbm, {
+    output$metric <- renderText({
+      sapply(input$cbm, do.call, args = list())
+      return("Done. Results saved.")
+      })
+  })
+  
 })
