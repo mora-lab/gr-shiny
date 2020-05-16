@@ -2,7 +2,7 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                 titlePanel(windowTitle ="GR-Shiny | Mora Lab | GMU",
                   div(column(width = 9, h2("GR-Shiny")), 
                                column(3, img(height = 100, width = 200, src = "labLogo.png")))),
-                br(),
+                hr(),
                 h5('This application allows analyzing a user defined dataset for ranking various enrichment tools for genomic regions.
    The current suite of tools include GREAT, Enrichr, Chipenrich, Broadenrich, Seq2pathway. However, only the latter 3 are available
    as functions in R and hence form a part of this interface. The user is required to select the dataset, tool, and the metric of
@@ -70,13 +70,8 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                   )),
                   sidebarLayout("", fluid = TRUE,
                                 sidebarPanel(
-                                  # tags$strong("1. Select Path"),
-                                  # br(),
-                                  textInput('files', '1. Select Path'),
+                                  textInput('files', '1. Input Path'),
                                   submitButton('Submit'),
-                                  # shinyFilesButton('files','Folder select','Please select a BED file', multiple =  FALSE,
-                                  #                  class = NULL, buttonType = "default"),
-                                  # verbatimTextOutput('filepaths'),
                                   
                                   helpText("For details on file structuring, visit the FAQ section."),
                                   
@@ -113,6 +108,7 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                                   
                   ))),
                   tabPanel("Frequently Asked Questions", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/faq.md")))),
-                  tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md")))))
-                
+                  tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md"))))),
+                hr(),
+                tags$footer(tags$blockquote("Joint School of Life Sciences, Guangzhou Medical University and Guangzhou Institute of Biomedicine and Health, Chinese Academy of Sciences."))
 ))
