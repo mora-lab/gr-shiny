@@ -12,3 +12,6 @@
 
 ##### **What is the primary input for this pipeline?**
 ##### This application takes over from the path for the folder that holds the BED files for the genomic regions defining a sample. There could be multiple samples, although, the following conditions must hold. First, the BED files must be without a header. Second, the data must be in the basic tab-separated, BED format with *Chromosome*, *Start*, and *End* values; and third, the files must be saved with the **GEO sample name** as the primary name (preferably) and **.bed** extension. 
+
+##### **How to track processing of the Shiny app?**
+##### The featured *animated icons* represent the background working of the application. Exceptionally, they also signify that a wait is active for the user's input.
