@@ -64,9 +64,9 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                                          )
                            )),
                   tabPanel("Analyze Data", fluid = TRUE, mainPanel(tabsetPanel(type = "pill",
-                                                                               tabPanel("Preview Data"), # Summary
-                                                                               tabPanel("Results"),
-                                                                               tabPanel("Download")
+                                                                               tabPanel("Results", 
+                                                                                        plotOutput(outputId = "uaPlot", width = "100%") %>% withSpinner(color="#FF5733", type = 4, size = 0.25))
+                                                                               
                   )),
                   sidebarLayout("", fluid = TRUE,
                                 sidebarPanel(
@@ -103,12 +103,15 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                                   submitButton("Calculate"),
                                   br(),
                                   verbatimTextOutput("metric") %>% withSpinner(color="#FF5733", type = 4, size = 0.25),
-                                  br()
+                                  br(),
                                   
+                                  radioButtons(inputId = "uam", label = "5. Select a Comparison Metric to plot",
+                                               choices = c("Sensitivity"='uasn', "Specificity"='uasp',  "ROC"='uaroc', "Prioritization"='uapn', "Precision"='uapr')),
+                                  br(),
+                                  submitButton("View"),
+                                  br()
                                   
                   ))),
                   tabPanel("Frequently Asked Questions", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/faq.md")))),
-                  tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md"))))),
-                hr(),
-                tags$footer(tags$blockquote("Joint School of Life Sciences, Guangzhou Medical University and Guangzhou Institute of Biomedicine and Health, Chinese Academy of Sciences."))
+                  tabPanel("Contact Us", fluid = TRUE, mainPanel(tabPanel("", includeMarkdown("www/contact.md")))))
 ))

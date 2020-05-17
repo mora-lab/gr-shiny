@@ -15,3 +15,6 @@
 
 ##### **How to track processing of the Shiny app?**
 ##### The featured *animated icons* represent the background working of the application. Exceptionally, they also signify that a wait is active for the user's input.
+
+##### **How can the data from results be downloaded?**
+##### The results are saved as RDS objects inside the *./data/results/* folder of the working directory. The same can then be downloaded after the successful run of the pipeline. 

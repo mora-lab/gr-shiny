@@ -389,13 +389,6 @@ shinyServer(function(input, output, session){
   ChIPSeqSamples <- c() ## list of sample names
   
   ## Validating path and confirming upload
-    
-  # output$filepaths <- renderText({
-    # shinyFileChoose(input, "files", roots= getVolumes(), session=session, filetypes=c('','bed'))
-    # dataFolder <<- paste0(dirname(parseFilePaths(roots=getVolumes(), input$files)$datapath), "/") ## Store folder location
-    
-    # return(dataFolder)
-    # })
   
   observeEvent(input$files, {
     output$upload <- renderText({
@@ -430,6 +423,71 @@ shinyServer(function(input, output, session){
       sapply(input$cbm, do.call, args = list())
       return("Done. Results saved.")
       })
+  })
+  
+  ## Define plots for each metric
+  
+  uaPlot <- function(){
+    if (!is.null(input$uam)) ## Check for valid inputs
+    {
+      if(input$uam == 'uasn'){ # sensitivity
+        
+        consolidatedSensitivity <- lapply(consolidatedSensitivity, function(x) as.data.frame(x))
+        plotSensitivity <- frameMe(consolidatedSensitivity)
+        plotMetrics(plotSensitivity)
+        
+      }
+      
+      if(input$uam == 'uasp'){ # specificity
+        
+        consolidatedSpecificity <- lapply(consolidatedSpecificity, function(x) as.data.frame(x))
+        plotSpecificity <- frameMe(consolidatedSpecificity)
+        plotMetrics(plotSpecificity)
+        
+      }
+      
+      ## Since ROC can only be plotted from sensitivity and specificity values, their options must be selected prior.
+      
+      if(input$uam == 'uaroc' && !is.null(input$uam=='uasn') && !is.null(input$uam=='uasp')){ 
+        rocPlot() # ROC
+      }
+      
+      if(input$uam == 'uapr'){ # precision
+        
+        consolidatedPrecision <- lapply(consolidatedPrecision, function(x) as.data.frame(x))
+        plotPrecision <- frameMe(consolidatedPrecision)
+        plotMetrics(plotPrecision)
+        
+      }
+      
+      if(input$uam == 'uapr'){ # prioritization
+        
+        consolidatedPrioritization <- lapply(consolidatedPrioritization, function(x) as.data.frame(x))
+        plotPrioritization <- frameMe(consolidatedPrioritization)
+        plotMetrics(plotPrioritization)
+        
+      }
+      
+    }   
+    
+  }
+  
+  ## Plotting results
+  
+  
+     
+  observeEvent(input$uam, {
+    output$uaPlot <- renderPlot(
+      {
+        if(is.null(input$uam)){
+          return(NULL)
+        }
+        else{
+          uaPlot()
+        }
+        
+      }, height = 500, width = 900)
+
   })
   
 })
