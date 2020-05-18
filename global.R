@@ -8,8 +8,12 @@ requiredPackages <- c("devtools", "GenomicRanges", "shiny", "shinythemes", "shin
                       "tidyr", "ggplot2", "markdown", "shinydashboard", "shinycssloaders", 
                       "seq2pathway", "chipenrich")
 
+# update previously installed packages
+if(requiredPackages %in% installed.packages()[,"Package"]) update.packages(requiredPackages) 
+
+
 newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
-if(length(newPackages)) BiocManager::install(newPackages)
+if(length(newPackages)) BiocManager::install(newPackages) # install missing packages
 
 library(shinycssloaders)
 library(shiny)

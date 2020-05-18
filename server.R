@@ -430,52 +430,52 @@ shinyServer(function(input, output, session){
   uaPlot <- function(){
     if (!is.null(input$uam)) ## Check for valid inputs
     {
-      if(input$uam == 'uasn'){ # sensitivity
-        
-        consolidatedSensitivity <- lapply(consolidatedSensitivity, function(x) as.data.frame(x))
-        plotSensitivity <- frameMe(consolidatedSensitivity)
-        plotMetrics(plotSensitivity)
-        
-      }
+      if(input$uam == 'uasn'){
+        consolidatedSensitivity <<- lapply(consolidatedSensitivity, function(x) as.data.frame(x))
+        plotMetrics(frameMe(consolidatedSensitivity), "Sensitivity")}
       
-      if(input$uam == 'uasp'){ # specificity
-        
-        consolidatedSpecificity <- lapply(consolidatedSpecificity, function(x) as.data.frame(x))
-        plotSpecificity <- frameMe(consolidatedSpecificity)
-        plotMetrics(plotSpecificity)
-        
-      }
+      if(input$uam == 'uasp'){
+        consolidatedSpecificity <<- lapply(consolidatedSpecificity, function(x) as.data.frame(x))
+        plotMetrics(frameMe(consolidatedSpecificity), "Specificity")}
       
-      ## Since ROC can only be plotted from sensitivity and specificity values, their options must be selected prior.
+      if(input$uam == 'uapr'){
+        consolidatedPrecision <<- lapply(consolidatedPrecision, function(x) as.data.frame(x))
+        plotMetrics(frameMe(consolidatedPrecision), "Precision")}
       
-      if(input$uam == 'uaroc' && !is.null(input$uam=='uasn') && !is.null(input$uam=='uasp')){ 
-        rocPlot() # ROC
-      }
-      
-      if(input$uam == 'uapr'){ # precision
-        
-        consolidatedPrecision <- lapply(consolidatedPrecision, function(x) as.data.frame(x))
-        plotPrecision <- frameMe(consolidatedPrecision)
-        plotMetrics(plotPrecision)
-        
-      }
-      
-      if(input$uam == 'uapr'){ # prioritization
-        
-        consolidatedPrioritization <- lapply(consolidatedPrioritization, function(x) as.data.frame(x))
-        plotPrioritization <- frameMe(consolidatedPrioritization)
-        plotMetrics(plotPrioritization)
-        
-      }
+      if(input$uam == 'uapn'){
+        consolidatedPrioritization <<- lapply(consolidatedPrioritization, function(x) as.data.frame(x))
+        plotMetrics(frameMe(consolidatedPrioritization), "Prioritization")}
       
     }   
     
   }
   
+  
+  uaOut <- function(){
+    if (!is.null(input$uam)) ## Check for valid inputs
+    {
+      if(input$uam == 'uasn'){consolidatedSensitivity}
+      
+      if(input$uam == 'uasp'){consolidatedSpecificity}
+      
+      if(input$uam == 'uapr'){consolidatedPrecision}
+      
+      if(input$uam == 'uapr'){consolidatedPrioritization}
+      
+    }   
+  }
+
+  ## Output results of comparison metrics
+  
+  observeEvent(input$uam, {
+    output$toolOut<- renderDataTable({
+      uaOut()
+    })    
+  })
+  
+  
   ## Plotting results
   
-  
-     
   observeEvent(input$uam, {
     output$uaPlot <- renderPlot(
       {

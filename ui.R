@@ -64,6 +64,8 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                                          )
                            )),
                   tabPanel("Analyze Data", fluid = TRUE, mainPanel(tabsetPanel(type = "pill",
+                                                                               tabPanel("Preview Data", 
+                                                                                        dataTableOutput("toolOut") %>% withSpinner(color="#FF5733", type = 4, size = 0.25)),
                                                                                tabPanel("Results", 
                                                                                         plotOutput(outputId = "uaPlot", width = "100%") %>% withSpinner(color="#FF5733", type = 4, size = 0.25))
                                                                                
@@ -105,8 +107,8 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                                   verbatimTextOutput("metric") %>% withSpinner(color="#FF5733", type = 4, size = 0.25),
                                   br(),
                                   
-                                  radioButtons(inputId = "uam", label = "5. Select a Comparison Metric to plot",
-                                               choices = c("Sensitivity"='uasn', "Specificity"='uasp',  "ROC"='uaroc', "Prioritization"='uapn', "Precision"='uapr')),
+                                  radioButtons(inputId = "uam", label = "5. Select a Comparison Metric to view data and plot",
+                                               choices = c("Sensitivity"='uasn', "Specificity"='uasp', "Prioritization"='uapn', "Precision"='uapr')),
                                   br(),
                                   submitButton("View"),
                                   br()
