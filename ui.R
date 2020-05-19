@@ -109,6 +109,7 @@ shinyUI(fluidPage(theme = shinytheme("united"),
                                   
                                   radioButtons(inputId = "uam", label = "5. Select a Comparison Metric to view data and plot",
                                                choices = c("Sensitivity"='uasn', "Specificity"='uasp', "Prioritization"='uapn', "Precision"='uapr')),
+                                  helpText("The data and plots can be viewed at the 'Preview Data' and 'Results' tabs, respectively, on the left."),
                                   br(),
                                   submitButton("View"),
                                   br()

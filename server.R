@@ -392,7 +392,7 @@ shinyServer(function(input, output, session){
   
   observeEvent(input$files, {
     output$upload <- renderText({
-        dataFolder <<- input$files
+        dataFolder <<- input$files  
         dataImportClean(dataFolder)
         return("Samples retrieved successfully.")
       })
