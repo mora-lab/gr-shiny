@@ -342,6 +342,7 @@ plotMetrics <- function(x, metric)
          mapping = aes(Tool, medianValue, fill=Tool, na.rm = FALSE)) +
     geom_boxplot(varwidth = TRUE) +
     labs(x= "TOOL", y= toupper(as.character(metric)))
+  ggsave(paste0("./data/results/",as.character(metric),".png")) # save the plot to disk.
 }
 
 
