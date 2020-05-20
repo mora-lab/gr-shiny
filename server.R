@@ -483,7 +483,7 @@ shinyServer(function(input, output, session){
           return(NULL)
         }
         else{
-          uaPlot()
+          reactive(uaPlot())
         }
         
       }, height = 500, width = 900)
