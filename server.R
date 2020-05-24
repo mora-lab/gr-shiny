@@ -1,8 +1,7 @@
 # Server logic 
 shinyServer(function(input, output, session){
   
-  source("global.R")
-  
+ source("global.R")
   
   ## Display the contents of the table in the main panel.  
   output$contents <- renderTable({

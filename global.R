@@ -2,14 +2,14 @@
 ## Installing and Loading libraries.
 
 if (!requireNamespace("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
+  install.packages("BiocManager", dependencies = TRUE)
 
 requiredPackages <- c("devtools", "GenomicRanges", "shiny", "shinythemes", "shinyjs",
                       "tidyr", "ggplot2", "markdown", "shinydashboard", "shinycssloaders", 
-                      "seq2pathway", "chipenrich", "htmlwidgets")
+                      "seq2pathway", "chipenrich", "htmlwidgets", "chipenrich.data")
 
 newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
-if(length(newPackages)) BiocManager::install(newPackages) # install missing packages
+if(length(newPackages)) BiocManager::install(newPackages, ask = TRUE) # install missing packages
 
 library(htmlwidgets)
 library(shinycssloaders)
@@ -24,9 +24,8 @@ library(devtools)
 library(GenomicRanges)
 library(seq2pathway)
 library(chipenrich)
+library(chipenrich.data)
 
-
-options(shiny.maxRequestSize = 100*1024^2) ## Setting maximum upload size to 100 Mb.
 source("./R/appFunctions.R") ## loading function definitions
 
 ## Creating results directory
@@ -59,3 +58,4 @@ consolidatedSpecificity <- vector("list", length = length(toolsResults))
 consolidatedSensitivity <- vector("list", length = length(toolsResults))
 consolidatedPrecision <- vector("list", length = length(toolsResults))
 consolidatedPrioritization <- vector("list", length = length(toolsResults))
+
