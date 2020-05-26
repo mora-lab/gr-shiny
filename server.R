@@ -46,7 +46,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Chipenrich", y= "Colorectal Cancer"))
+                labs(x= "Chipenrich | Colorectal Cancer", y= "Metric"))
       }
       
       ## Colorectal Cancer and Broadenrich
@@ -63,7 +63,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Broadenrich", y= "Colorectal Cancer"))
+                labs(x= "Broadenrich | Colorectal Cancer", y= "Metric"))
         
       }
       
@@ -81,7 +81,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Seq2pathway", y= "Colorectal Cancer"))
+                labs(x= "Seq2pathway | Colorectal Cancer", y= "Metric"))
       }
       
       ## Colorectal Cancer and Enrichr
@@ -98,7 +98,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Enrichr", y= "Colorectal Cancer"))
+                labs(x= "Enrichr | Colorectal Cancer", y= "Metric"))
       }
       
       ## Colorectal Cancer and GREAT
@@ -115,7 +115,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "GREAT", y= "Colorectal Cancer"))
+                labs(x= "GREAT | Colorectal Cancer", y= "Metric"))
       }
       
       ## Gastric Cancer and Chipenrich
@@ -132,7 +132,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Chipenrich", y= "Gastric Cancer"))
+                labs(x= "Chipenrich | Gastric Cancer", y= "Metric"))
       }
       
       ## Gastric Cancer and Broadenrich
@@ -149,7 +149,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Broadenrich", y= "Gastric Cancer"))
+                labs(x= "Broadenrich | Gastric Cancer", y= "Metric"))
       }
       
       ## Gastric Cancer and Seq2pathway
@@ -166,7 +166,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Seq2pathway", y= "Gastric Cancer"))
+                labs(x= "Seq2pathway | Gastric Cancer", y= "Metric"))
       }
       
       ## Gastric Cancer and Enrichr
@@ -183,7 +183,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Enrichr", y= "Gastric Cancer"))
+                labs(x= "Enrichr | Gastric Cancer", y= "Metric"))
       }
       
       ## Gastric Cancer and GREAT
@@ -200,7 +200,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "GREAT", y= "Gastric Cancer"))
+                labs(x= "GREAT | Gastric Cancer", y= "Metric"))
       }
       
       ## Prostate Cancer and Chipenrich
@@ -217,7 +217,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Chipenrich", y= "Prostate Cancer"))
+                labs(x= "Chipenrich | Prostate Cancer", y= "Metric"))
       }
       
       ## Prostate Cancer and Broadenrich
@@ -234,7 +234,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Broadenrich", y= "Prostate Cancer"))
+                labs(x= "Broadenrich | Prostate Cancer", y= "Metric"))
       }
       
       ## Prostate Cancer and Seq2pathway
@@ -251,7 +251,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Seq2pathway", y= "Prostate Cancer"))
+                labs(x= "Seq2pathway | Prostate Cancer", y= "Metric"))
       }
       
       ## Prostate Cancer and Enrichr
@@ -268,7 +268,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Enrichr", y= "Prostate Cancer"))
+                labs(x= "Enrichr | Prostate Cancer", y= "Metric"))
       }
       
       ## Prostate Cancer and GREAT
@@ -285,7 +285,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "GREAT", y= "Prostate Cancer"))
+                labs(x= "GREAT | Prostate Cancer", y= "Metric"))
       }
       
       ## Alzheimer's Disease and Chipenrich
@@ -302,7 +302,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Chipenrich", y= "Alzheimer's Disease"))
+                labs(x= "Chipenrich | Alzheimer's Disease", y= "Metric"))
       }
       
       ## Alzheimer's Disease and Broadenrich
@@ -319,7 +319,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Broadenrich", y= "Alzheimer's Disease"))
+                labs(x= "Broadenrich | Alzheimer's Disease", y= "Metric"))
       }
       
       ## Alzheimer's Disease and Seq2pathway
@@ -336,7 +336,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Seq2pathway", y= "Alzheimer's Disease"))
+                labs(x= "Seq2pathway | Alzheimer's Disease", y= "Metric"))
       }
       
       ## Alzheimer's Disease and Enrichr
@@ -353,7 +353,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "Enrichr", y= "Alzheimer's Disease"))
+                labs(x= "Enrichr | Alzheimer's Disease", y= "Metric"))
       }
       
       ## Alzheimer's Disease and GREAT
@@ -370,7 +370,7 @@ shinyServer(function(input, output, session){
         print(ggplot(data = db_gather,
                      mapping = aes(Metric, Value, fill=Metric, na.rm = FALSE)) +
                 geom_boxplot(varwidth = TRUE) +
-                labs(x= "GREAT", y= "Alzheimer's Disease"))
+                labs(x= "GREAT | Alzheimer's Disease", y= "Metric"))
       }
     }
   }
