@@ -7,17 +7,13 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
    The current suite of tools include GREAT, Enrichr, Chipenrich, Broadenrich, Seq2pathway. However, only the latter 3 are available
    as functions in R and hence form a part of this interface. The user is required to select the dataset, tool, and the metric of
    comparison. The application returns the plot and values as a result.'),
-                h5("The interactive module allows for reviewing the results from our current study of benchmark data as we formulated. We chose a dataset 
-                   of 106 samples (refer Dataset-Reference tab for details). For the given gold-standard(diseases) datasets and tools, the resultant plots 
-                   have been depicted as under."),  
+                h5('The interactive module allows for reviewing the results from our current study of benchmark data as we formulated. We chose a dataset 
+                   of 106 samples, details for which can be found in the FAQ section. For the given gold-standard (diseases) datasets and tools, the resultant plots have been depicted as under.'),  
                 br(),
                 tabsetPanel(
                   tabPanel("Review Results from our Study ", fluid = TRUE, 
                            mainPanel(
                              tabsetPanel(type = "pill",
-                                         tabPanel("Dataset Reference",
-                                                  tags$iframe(style="height:1000px; width:100%; scrolling=yes", 
-                                                              src="GSA_ChIP_Seq_Master_Table.pdf")), # Summary
                                          tabPanel("Results", 
                                                   tabsetPanel(type = "pill",
                                                               tabPanel("Plots on relative performance",

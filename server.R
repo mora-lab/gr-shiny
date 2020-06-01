@@ -3,18 +3,6 @@ shinyServer(function(input, output, session){
   
  source("global.R")
   
-  ## Display the contents of the table in the main panel.  
-  output$contents <- renderTable({
-    if (is.null(input$bds))
-      return(NULL)
-    head(read.table(input$bds$datapath, header = input$header, sep = "\t", quote = ""))
-  })
-  
-  ## Display the summary of the table.
-  output$summary <- renderPrint({
-    summary(input$bds)
-  })
-  
   ## Aggregating plots from the radio button inputs from user- tool and disease.
   forPlot <- function(){
     
