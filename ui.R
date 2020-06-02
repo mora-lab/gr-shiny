@@ -62,18 +62,21 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                                                                                        submitButton("View")
                                                                                      ))),
                                                               
-                                                    tabPanel("ROC Plot",
+                                                    tabPanel("ROC Plot", fluid = TRUE, mainPanel(
                                                                        tags$img(src="ROC_Plot.jpeg",
                                                                                 height="500",
                                                                                 width="900",
-                                                                                align="center")))),  # ROC Plot
+                                                                                align="center"))))),  # ROC Plot
                   
                   
-                  tabPanel("Analyze Data", fluid = TRUE, mainPanel(tabsetPanel(type = "pill",
-                                                                               tabPanel("Preview Data", 
-                                                                                        dataTableOutput("toolOut") %>% withSpinner(color="#0000FF", type = 4, size = 0.25)),
-                                                                               tabPanel("Results", 
-                                                                                        plotOutput(outputId = "uaPlot", width = "100%") %>% withSpinner(color="#0000FF", type = 4, size = 0.25))
+                  tabPanel("Analyze Data", fluid = TRUE, mainPanel(
+                    tabsetPanel(type = "pill",
+                                
+                                tabPanel("Preview Data", fluid = TRUE, mainPanel(
+                                  dataTableOutput("toolOut") %>% withSpinner(color="#0000FF", type = 4, size = 0.25))),
+                                
+                                tabPanel("Results", fluid = TRUE, mainPanel(
+                                  plotOutput(outputId = "uaPlot", width = "100%") %>% withSpinner(color="#0000FF", type = 4, size = 0.25)))
                                                                                
                   )),
                   
