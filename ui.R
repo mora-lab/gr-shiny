@@ -12,11 +12,9 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                 br(),
                 tabsetPanel(
                   tabPanel("Review Results from our Study ", fluid = TRUE, 
-                           mainPanel(
-                             tabsetPanel(type = "pill",
-                                         tabPanel("Results", 
-                                                  tabsetPanel(type = "pill",
-                                                              tabPanel("Plots on relative performance",
+                                        tabsetPanel(type = "pill",
+                                                              
+                                                    tabPanel("Plots on relative performance", fluid = TRUE, mainPanel(
                                                                        conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 
                                                                                                                               height="500", 
                                                                                                                               width="900",
@@ -32,20 +30,25 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                                                                        conditionalPanel(condition = "input.m=='pn'", tags$img(src="Precision_ggplot.jpeg",
                                                                                                                               height="500", 
                                                                                                                               width="900",
-                                                                                                                              align="center")),
+                                                                                                                              align="center"))),
                                                                        
-                                                                       sidebarLayout("", fluid = TRUE, 
+                                                                       
+                                                    sidebarLayout("", fluid = TRUE, 
                                                                                      sidebarPanel(
                                                                                        radioButtons(inputId = "m", label = "Select a Comparison Metric",
                                                                                                     choices = c("Sensitivity"='sn', "Specificity"='sp',  "Prioritization"='pn', "Precision"='pr'),
                                                                                                     selected = 'sn'),
                                                                                        br(),
                                                                                        submitButton("View")
-                                                                                     )
-                                                                       )),     # Display plot
-                                                              tabPanel("Plots on Overall Performance",
-                                                                       plotOutput(outputId = "studyplot", width = "100%") %>% withSpinner(color="#0000FF", type = 4, size = 0.25),
-                                                                       sidebarLayout("", fluid = TRUE,
+                                                                                     ))),     # Display plot
+                                                              
+                                                    
+                                                    
+                                                    tabPanel("Plots on Overall Performance", fluid = TRUE, mainPanel(
+                                                                       plotOutput(outputId = "studyplot", width = "100%") %>% withSpinner(color="#0000FF", type = 4, size = 0.25)),
+                                                                       
+                                                             
+                                                             sidebarLayout("", fluid = TRUE,
                                                                                      sidebarPanel(
                                                                                        radioButtons(inputId = "d", label = "Select a Gold Standard dataset",
                                                                                                     choices = c("Colorectal Cancer"='cc', "Prostate Cancer"='pc',  "Gastric Cancer"='gc', 
@@ -57,15 +60,15 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                                                                                                     selected = 'ce'),
                                                                                        br(),
                                                                                        submitButton("View")
-                                                                                     )
-                                                                       )),
-                                                              tabPanel("ROC Plot",
+                                                                                     ))),
+                                                              
+                                                    tabPanel("ROC Plot",
                                                                        tags$img(src="ROC_Plot.jpeg",
                                                                                 height="500",
                                                                                 width="900",
-                                                                                align="center")))) # ROC Plot
-                             )),
-                           ),
+                                                                                align="center")))),  # ROC Plot
+                  
+                  
                   tabPanel("Analyze Data", fluid = TRUE, mainPanel(tabsetPanel(type = "pill",
                                                                                tabPanel("Preview Data", 
                                                                                         dataTableOutput("toolOut") %>% withSpinner(color="#0000FF", type = 4, size = 0.25)),
@@ -73,6 +76,7 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                                                                                         plotOutput(outputId = "uaPlot", width = "100%") %>% withSpinner(color="#0000FF", type = 4, size = 0.25))
                                                                                
                   )),
+                  
                   sidebarLayout("", fluid = TRUE,
                                 sidebarPanel(
                                   textInput('files', '1. Input Path'),
