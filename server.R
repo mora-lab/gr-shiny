@@ -418,20 +418,20 @@ shinyServer(function(input, output, session){
     if (!is.null(input$uam)) ## Check for valid inputs
     {
       if(input$uam == 'uasn'){
-        consolidatedSensitivity <<- lapply(consolidatedSensitivity, function(x) as.data.frame(x))
-        plotMetrics(frameMe(consolidatedSensitivity), "Sensitivity")}
+        conSens <<- lapply(consolidatedSensitivity, function(x) as.data.frame(x))
+        plotMetrics(frameMe(conSens), "Sensitivity")}
       
       if(input$uam == 'uasp'){
-        consolidatedSpecificity <<- lapply(consolidatedSpecificity, function(x) as.data.frame(x))
-        plotMetrics(frameMe(consolidatedSpecificity), "Specificity")}
+        conSpec <<- lapply(consolidatedSpecificity, function(x) as.data.frame(x))
+        plotMetrics(frameMe(conSpec), "Specificity")}
       
       if(input$uam == 'uapr'){
-        consolidatedPrecision <<- lapply(consolidatedPrecision, function(x) as.data.frame(x))
-        plotMetrics(frameMe(consolidatedPrecision), "Precision")}
+        conPrec <<- lapply(consolidatedPrecision, function(x) as.data.frame(x))
+        plotMetrics(frameMe(conPrec), "Precision")}
       
       if(input$uam == 'uapn'){
-        consolidatedPrioritization <<- lapply(consolidatedPrioritization, function(x) as.data.frame(x))
-        plotMetrics(frameMe(consolidatedPrioritization), "Prioritization")}
+        conPrio <<- lapply(consolidatedPrioritization, function(x) as.data.frame(x))
+        plotMetrics(frameMe(conPrio), "Prioritization")}
       
     }   
     
@@ -441,13 +441,13 @@ shinyServer(function(input, output, session){
   uaOut <- function(){
     if (!is.null(input$uam)) ## Check for valid inputs
     {
-      if(input$uam == 'uasn'){consolidatedSensitivity}
+      if(input$uam == 'uasn'){return(consolidatedSensitivity)}
       
-      if(input$uam == 'uasp'){consolidatedSpecificity}
+      if(input$uam == 'uasp'){return(consolidatedSpecificity)}
       
-      if(input$uam == 'uapr'){consolidatedPrecision}
+      if(input$uam == 'uapr'){return(consolidatedPrecision)}
       
-      if(input$uam == 'uapr'){consolidatedPrioritization}
+      if(input$uam == 'uapn'){return(consolidatedPrioritization)}
       
     }   
   }
@@ -456,7 +456,7 @@ shinyServer(function(input, output, session){
   
   observeEvent(input$uam, {
     output$toolOut<- renderDataTable({
-      uaOut()
+      reactive(uaOut())
     })    
   })
   
@@ -464,16 +464,9 @@ shinyServer(function(input, output, session){
   ## Plotting results
   
   observeEvent(input$uam, {
-    output$uaPlot <- renderPlot(
-      {
-        if(is.null(input$uam)){
-          return(NULL)
-        }
-        else{
+    output$uaPlot <- renderPlot({
           reactive(uaPlot())
-        }
-        
-      }, height = 500, width = 900)
+        }, height = 500, width = 900)
 
   })
   
