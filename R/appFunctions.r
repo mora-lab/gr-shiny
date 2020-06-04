@@ -338,10 +338,10 @@ plotMetrics <- function(x, metric)
   y <- gather(x, Tool, medianValue, -Samples)
   y$Tool <- toupper(y$Tool)
   y$Tool <- substr(y$Tool,1,nchar(y$Tool)-15)
-  ggplot(data = y,
+  print(ggplot(data = y,
          mapping = aes(Tool, medianValue, fill=Tool, na.rm = FALSE)) +
     geom_boxplot(varwidth = TRUE) +
-    labs(x= "TOOL", y= toupper(as.character(metric)))
+    labs(x= "TOOL", y= toupper(as.character(metric))))
   ggsave(paste0("./data/results/",as.character(metric),".png")) # save the plot to disk.
 }
 
