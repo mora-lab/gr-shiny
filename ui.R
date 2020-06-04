@@ -13,6 +13,8 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                 tabsetPanel(
                   tabPanel("Review Results from our Study ", fluid = TRUE, 
                                         tabsetPanel(type = "pill",
+                                                    
+                                                    tabPanel("Benchmark Dataset", fluid = TRUE, mainPanel(tableOutput("chart"))),
                                                               
                                                     tabPanel("Plots on relative performance", fluid = TRUE, mainPanel(
                                                       conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 

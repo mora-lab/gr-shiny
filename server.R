@@ -3,6 +3,14 @@ shinyServer(function(input, output, session){
   
  source("global.R")
   
+  ## Displaying Master Table for the samples chosne for our study.
+  
+  output$chart<- renderTable({
+    buf <- read.table("./www/samplesMasterTable.txt", header = TRUE, sep = "\t", quote="")
+    return(buf[1:(length(buf)-1)])
+  })   
+  
+  
   ## Aggregating plots from the radio button inputs from user- tool and disease.
   forPlot <- function(){
     
@@ -455,7 +463,7 @@ shinyServer(function(input, output, session){
   ## Output results of comparison metrics
   
   observeEvent(input$uam, {
-    output$toolOut<- renderDataTable({
+    output$toolOut<- renderTable({
       uaOut()
     })    
   })

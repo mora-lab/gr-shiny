@@ -64,4 +64,3 @@ consolidatedSpecificity <- vector("list", length = length(toolsResults))
 consolidatedSensitivity <- vector("list", length = length(toolsResults))
 consolidatedPrecision <- vector("list", length = length(toolsResults))
 consolidatedPrioritization <- vector("list", length = length(toolsResults))
-
