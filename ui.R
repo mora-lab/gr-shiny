@@ -8,13 +8,23 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
    as functions in R and hence form a part of this interface. The user is required to select the dataset, tool, and the metric of
    comparison. The application returns the plot and values as a result.'),
                 h5('The interactive module allows for reviewing the results from our current study of benchmark data as we formulated. We chose a dataset 
-                   of 106 samples, details for which can be found in the FAQ section. For the given gold-standard (diseases) datasets and tools, the resultant plots have been depicted as under.'),  
+                   of 106 samples, complete details for which can be found in the FAQ section. For the given gold-standard (diseases) datasets and tools, the resultant plots have been depicted as under.'),  
                 br(),
                 tabsetPanel(
                   tabPanel("Review Results from our Study ", fluid = TRUE, 
                                         tabsetPanel(type = "pill",
                                                     
-                                                    tabPanel("Benchmark Dataset", fluid = TRUE, mainPanel(tableOutput("chart"))),
+                                                    tabPanel("Benchmark Dataset", fluid = TRUE, mainPanel(tableOutput("chart")),
+                                                             
+                                                             sidebarLayout("", fluid = TRUE,
+                                                               sidebarPanel(strong("Gist"), hr(), h5('Our study is based on a self selected benchmark dataset of 106 samples. Each sample has been 
+                                                                                                     characterized for several attributes, notably the target pathway. The malady associated with 
+                                                                                                     a sample aligns it to the enrichment terms, for that disease, as enlisted in GO and KEGG 
+                                                                                                     pathway databases (in use here). These provide the basis for caliberating the comparison
+                                                                                                     metrics of sensivitiy, specificity, precision, and prioritization. With the relevant comparison
+                                                                                                     scores dervied out of these metrics, a genomic range enrichment tool is ranked for its efficacy.')))
+                                                             
+                                                             ),
                                                               
                                                     tabPanel("Plots on relative performance", fluid = TRUE, mainPanel(
                                                       conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 

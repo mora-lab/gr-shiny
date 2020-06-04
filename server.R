@@ -7,7 +7,7 @@ shinyServer(function(input, output, session){
   
   output$chart<- renderTable({
     buf <- read.table("./www/samplesMasterTable.txt", header = TRUE, sep = "\t", quote="")
-    return(buf[1:(length(buf)-1)])
+    return(buf[ , c("Experimental_Method", "Cell_Type.Tissue", "GSM", "TF.Histone_Mark", "Disease.Target_Pathway", "PMID")])
   })   
   
   
