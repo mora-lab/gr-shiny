@@ -17,7 +17,7 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                                                     tabPanel("Benchmark Dataset", fluid = TRUE, mainPanel(tableOutput("chart")),
                                                              
                                                              sidebarLayout("", fluid = TRUE,
-                                                               sidebarPanel(strong("Gist"), hr(), h5('Our study is based on a self selected benchmark dataset of 106 samples. Each sample has been 
+                                                               sidebarPanel(h4(strong("Gist")), hr(), h5('Our study is based on a self-curated benchmark dataset of 106 samples. Each sample has been 
                                                                                                      characterized for several attributes, notably the target pathway. The malady associated with 
                                                                                                      a sample aligns it to the enrichment terms, for that disease, as enlisted in GO and KEGG 
                                                                                                      pathway databases (in use here). These provide the basis for caliberating the comparison
