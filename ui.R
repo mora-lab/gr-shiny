@@ -6,9 +6,9 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                 h5('This application allows analyzing a user defined dataset for ranking various enrichment tools for genomic regions.
    The current suite of tools include GREAT, Enrichr, Chipenrich, Broadenrich, Seq2pathway. However, only the latter 3 are available
    as functions in R and hence form a part of this interface. The user is required to select the dataset, tool, and the metric of
-   comparison. The application returns the plot and values as a result.'),
+   comparison. The application returns the plot and values as a result.', style="text-align:justify"),
                 h5('The interactive module allows for reviewing the results from our current study of benchmark data as we formulated. We chose a dataset 
-                   of 106 samples, complete details for which can be found in the FAQ section. For the given gold-standard (diseases) datasets and tools, the resultant plots have been depicted as under.'),  
+                   of 106 samples, complete details for which can be found in the FAQ section. For the given gold-standard (diseases) datasets and tools, the resultant plots have been depicted as under.', style="text-align:justify"),  
                 br(),
                 tabsetPanel(
                   tabPanel("Review Results from our Study ", fluid = TRUE, 
@@ -22,7 +22,7 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                                                                                                      a sample aligns it to the enrichment terms, for that disease, as enlisted in GO and KEGG 
                                                                                                      pathway databases (in use here). These provide the basis for caliberating the comparison
                                                                                                      metrics of sensivitiy, specificity, precision, and prioritization. With the relevant comparison
-                                                                                                     scores dervied out of these metrics, a genomic range enrichment tool is ranked for its efficacy.')))
+                                                                                                     scores dervied out of these metrics, a genomic range enrichment tool is ranked for its efficacy.', style="text-align:justify")))
                                                              
                                                              ),
                                                               
