@@ -15,19 +15,19 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                                         tabsetPanel(type = "pill",
                                                               
                                                     tabPanel("Plots on relative performance", fluid = TRUE, mainPanel(
-                                                                       conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 
+                                                      conditionalPanel(condition = "input.m=='sn'", tags$img(src="Sensitivity_ggplot.jpeg", 
                                                                                                                               height="500", 
                                                                                                                               width="900",
                                                                                                                               align="center")),
-                                                                       conditionalPanel(condition = "input.m=='sp'", tags$img(src="Specificity_ggplot.jpeg",
+                                                      conditionalPanel(condition = "input.m=='sp'", tags$img(src="Specificity_ggplot.jpeg",
                                                                                                                               height="500", 
                                                                                                                               width="900",
                                                                                                                               align="center")),
-                                                                       conditionalPanel(condition = "input.m=='pr'", tags$img(src="Prioritization_ggplot.jpeg",
+                                                      conditionalPanel(condition = "input.m=='pn'", tags$img(src="Prioritization_ggplot.jpeg",
                                                                                                                               height="500", 
                                                                                                                               width="900",
                                                                                                                               align="center")),
-                                                                       conditionalPanel(condition = "input.m=='pn'", tags$img(src="Precision_ggplot.jpeg",
+                                                      conditionalPanel(condition = "input.m=='pr'", tags$img(src="Precision_ggplot.jpeg",
                                                                                                                               height="500", 
                                                                                                                               width="900",
                                                                                                                               align="center"))),
@@ -73,7 +73,7 @@ shinyUI(fluidPage(theme = shinytheme("sandstone"),
                     tabsetPanel(type = "pill",
                                 
                                 tabPanel("Preview Data", fluid = TRUE, mainPanel(
-                                  dataTableOutput("toolOut") %>% withSpinner(color="#0000FF", type = 4, size = 0.25))),
+                                  tableOutput("toolOut") %>% withSpinner(color="#0000FF", type = 4, size = 0.25))),
                                 
                                 tabPanel("Results", fluid = TRUE, mainPanel(
                                   plotOutput(outputId = "uaPlot", width = "100%") %>% withSpinner(color="#0000FF", type = 4, size = 0.25)))
