@@ -192,7 +192,7 @@ dataImportClean <- function(loc){
     ## The following code creates a list of samples for which we need to extract the BED files for.
     
     
-    ChIPSeqSamples <<- list.files(loc) # Extracting files from the input directory.
+    ChIPSeqSamples <<- list.files(loc, pattern = "\\.bed$") # Extracting BED files from the input directory.
     ChIPSeqSamples <<- substr(ChIPSeqSamples,1,nchar(ChIPSeqSamples)-4) # Clipping file extension to retrieve sample names only.
     
     ## Initializing list for storing BED files and the consecutive GRanges objects.
