@@ -449,14 +449,13 @@ shinyServer(function(input, output, session){
   uaOut <- function(){
     if (!is.null(input$uam)) ## Check for valid inputs
     {
-      if(input$uam == 'uasn'){frameMe(consolidatedSensitivity)}
+      if(input$uam == 'uasn'){return(frameMe(consolidatedSensitivity))}
       
-      if(input$uam == 'uasp'){frameMe(consolidatedSpecificity)}
+      if(input$uam == 'uasp'){return(frameMe(consolidatedSpecificity))}
       
-      if(input$uam == 'uapr'){frameMe(consolidatedPrecision)}
+      if(input$uam == 'uapr'){return(frameMe(consolidatedPrecision))}
       
-      if(input$uam == 'uapn'){frameMe(consolidatedPrioritization)}
-      
+      if(input$uam == 'uapn'){return(frameMe(consolidatedPrioritization))}
     }   
   }
 
