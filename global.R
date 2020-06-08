@@ -8,7 +8,7 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 requiredPackages <- c("devtools", "Biostrings", "Rsamtools", "GenomicAlignments", "polspline", 
                       "GenomicRanges", "shiny", "shinythemes", "shinyjs", "tidyr", "ggplot2", 
                       "markdown", "shinydashboard", "shinycssloaders", "seq2pathway", "chipenrich", 
-                      "htmlwidgets", "chipenrich.data")
+                      "htmlwidgets", "chipenrich.data", "hash")
 
 newPackages <- requiredPackages[!(requiredPackages %in% installed.packages()[,"Package"])]
 if(length(newPackages)) BiocManager::install(newPackages, ask = TRUE) # install missing packages
@@ -31,6 +31,7 @@ library(Biostrings)
 library(Rsamtools)
 library(GenomicAlignments)
 library(polspline)
+library(hash)
 
 source("./R/appFunctions.R") ## loading function definitions
 
