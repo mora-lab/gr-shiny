@@ -195,6 +195,14 @@ dataImportClean <- function(loc){
     ChIPSeqSamples <<- list.files(loc, pattern = "\\.bed$") # Extracting BED files from the input directory.
     ChIPSeqSamples <<- substr(ChIPSeqSamples,1,nchar(ChIPSeqSamples)-4) # Clipping file extension to retrieve sample names only.
     
+   
+     ## loading data from master table
+    
+    masterTable <<- list.files(loc, pattern = "\\.txt$")
+    masterTable <<- substr(masterTable,1,nchar(masterTable)-4) # Clipping file extension to retrieve sample names only.
+    summaryTable <<- read.table(paste0(loc,paste0(eval(parse(text="masterTable[1]")),".txt")), sep = "\t", header = TRUE, quote = "")
+    summaryTable <<- summaryTable[, c("GSM", "Disease...Target..Pathway")]
+    
     ## Initializing list for storing BED files and the consecutive GRanges objects.
     
     samplesInBED <- list()
@@ -326,12 +334,6 @@ listToFrame <- function(listLists)
   row.names(finalFrame) <- NULL
   colnames(finalFrame) <- diseasePools
   finalFrame$Samples <- ChIPSeqSamples # add key attribute of sample names. this may be helpful for the purpose of joining dataframes.
-  
-  ## loading data from master table
-  
-  summaryTable <- read.table("./GSAChIPSeqBenchmarkDatasetProfile.txt", sep = "\t", header = TRUE, quote = "")
-  summaryTable <- summaryTable[, c("GSM", "Disease...Target..Pathway")]
-  
   
   ## pre-process for making comparisons
   
