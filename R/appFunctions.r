@@ -52,21 +52,16 @@ calculateSensitivity <- function(tool)
     for (dis in 1:length(diseasePools))
     {
       truePositives <- list()
-      trueNegativesIDs <- list()
-      falsePositives1IDs <- list()
-      falsePositives2IDs <- list()
+      trueNegatives <- list()
       falsePositives <- list()
       falseNegatives <- list()
       
       ## Tool results' subsets on the basis of statistical significance.
       greaterThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] > 0.05),]
       lessThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] <= 0.05),]
-      trueNegativesIDs <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
-      
-      falsePositives1IDs <- intersect(eval(parse(text=diseasePools[dis])),greaterThan0.05[[1]])
-      falsePositives2IDs <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
-      
-      falsePositives <- c(falsePositives1IDs,falsePositives2IDs)
+      trueNegatives <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
+     
+      falsePositives <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
       truePositives <- intersect(lessThan0.05[[1]], eval(parse(text=diseasePools[dis])))
       falseNegatives <- intersect(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis])))
       
@@ -99,27 +94,22 @@ calculateSpecificity <- function(tool)
     for (dis in 1:length(diseasePools))
     {
       truePositives <- list()
-      trueNegativesIDs <- list()
-      falsePositives1IDs <- list()
-      falsePositives2IDs <- list()
+      trueNegatives <- list()
       falsePositives <- list()
       falseNegatives <- list()
       
       ## Tool results' subsets on the basis of statistical significance.
       greaterThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] > 0.05),]
       lessThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] <= 0.05),]
-      trueNegativesIDs <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
+      trueNegatives <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
       
-      falsePositives1IDs <- intersect(eval(parse(text=diseasePools[dis])),greaterThan0.05[[1]])
-      falsePositives2IDs <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
-      
-      falsePositives <- c(falsePositives1IDs,falsePositives2IDs)
+      falsePositives <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
       truePositives <- intersect(lessThan0.05[[1]], eval(parse(text=diseasePools[dis])))
       falseNegatives <- intersect(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis])))
       
       ## Results
       
-      specificity <- length(trueNegativesIDs)/(length(trueNegativesIDs)+length(falsePositives))
+      specificity <- length(trueNegatives)/(length(trueNegatives)+length(falsePositives))
       
       # Store results
       
@@ -146,21 +136,16 @@ calculatePrecision <- function(tool)
     for (dis in 1:length(diseasePools))
     {
       truePositives <- list()
-      trueNegativesIDs <- list()
-      falsePositives1IDs <- list()
-      falsePositives2IDs <- list()
+      trueNegatives <- list()
       falsePositives <- list()
       falseNegatives <- list()
       
       ## Tool results' subsets on the basis of statistical significance.
       greaterThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] > 0.05),]
       lessThan0.05 <- eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[which(eval(parse(text=(paste0(paste0(toolsResults[tool],"$"), ChIPSeqSamples[sam]))))[2] <= 0.05),]
-      trueNegativesIDs <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
+      trueNegatives <- setdiff(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis]))) ## All ids that are there in the tool result with p > 0.05 and absent in the disease pool.
       
-      falsePositives1IDs <- intersect(eval(parse(text=diseasePools[dis])),greaterThan0.05[[1]])
-      falsePositives2IDs <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
-      
-      falsePositives <- c(falsePositives1IDs,falsePositives2IDs)
+      falsePositives <- setdiff(lessThan0.05[[1]],eval(parse(text=diseasePools[dis])))
       truePositives <- intersect(lessThan0.05[[1]], eval(parse(text=diseasePools[dis])))
       falseNegatives <- intersect(greaterThan0.05[[1]], eval(parse(text=diseasePools[dis])))
       
