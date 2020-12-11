@@ -3,7 +3,7 @@ shinyServer(function(input, output, session){
   
  source("global.R")
   
-  ## Displaying Master Table for the samples chosne for our study.
+  ## Displaying Master Table for the samples chosen for our study.
   
   output$chart<- renderTable({
     buf <- read.table("./www/samplesMasterTable.txt", header = TRUE, sep = "\t", quote="")
@@ -11,7 +11,7 @@ shinyServer(function(input, output, session){
   })   
   
   
-  ## Aggregating plots from the radio button inputs from user- tool and disease.
+  ## Aggregating plots from the radio button inputs from user-tool and disease.
   forPlot <- function(){
     
     
