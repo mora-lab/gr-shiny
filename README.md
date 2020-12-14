@@ -1,8 +1,3 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
 # gr-shiny
 (A genomic-range gene-set-analysis method benchmarking shiny app)
 
