@@ -1,3 +1,9 @@
+## Author: Shaurya Jauhari
+## Last Reviewed: December 14th, 2020.
+## Description: The following is a compendium of functions that are used in the Shiny App.
+
+
+## 1 ##
 ## This function takes a number (tool index) as input and returns the prioritization data against each given disease.
 
 calculatePrioritization <- function(tool){
@@ -40,6 +46,8 @@ return(listToFrame(forPrioritization))
 ## (For GREAT) Note that in the resultant table, the zero entries reflect that there are no matches between the disease terms and the tool 
 ## output. While the empty cells mean that the output for the particular sample was not available.
 
+## 2 ##
+## This function takes a number (tool index) as input and returns the sensitivity (recall) data against each given disease.
 
 calculateSensitivity <- function(tool)
 {
@@ -81,6 +89,10 @@ calculateSensitivity <- function(tool)
   return(listToFrame(forSensitivity))
 }
 
+
+
+## 3 ##
+## This function takes a number (tool index) as input and returns the specificity data against each given disease.
 
 calculateSpecificity <- function(tool)
 {
@@ -125,6 +137,10 @@ calculateSpecificity <- function(tool)
 }
 
 
+
+## 4 ##
+## This function takes a number (tool index) as input and returns the precision data against each given disease.
+
 calculatePrecision <- function(tool)
 {
   forPrecision <- vector("list", length(ChIPSeqSamples))
@@ -167,6 +183,11 @@ calculatePrecision <- function(tool)
 }
 
 
+## 5 ##
+## This script will load data corresponding to the tabulated, and save them as physical objects for later use;
+## (i) The BED files as GRanges objects (samplesInBED)
+## (ii) List of file names (ChIPSeqSamples)
+## It takes as argument the path of the directory that contains files and the table.
 
 dataImportClean <- function(loc){
   
@@ -209,6 +230,12 @@ dataImportClean <- function(loc){
     saveRDS(samplesInBED, "./data/samplesInBED.rds")
     saveRDS(ChIPSeqSamples, "./data/ChIPSeqSamples.rds")
 }
+
+
+## 6 ##
+## This script takes no input, and basically loads the pathway definitions of the given diseases as sourced from 
+## GO and KEGG databases, and saves them as R objects. The choice of the particular diseases is made by the user.
+## Currently, we are considering Prostate Cancer, Alzheimer's Disease, Gastric Cancer, and Colorectal Cancer.
 
 
 diseaseTerms <- function(){
@@ -280,6 +307,12 @@ saveRDS(gastricCancerPool, "./data/gastricCancerPool")
 }
 
 
+## 7 ##
+## This function doesn't work in isolation. It takes into account pre-exisiting objects
+## in this  pipeline. It assembles together a dataframe with results from the selected tools
+## against each sample from the listed dataset.
+
+
 frameMe <- function(x)
 {
   library(dplyr)
@@ -290,6 +323,9 @@ frameMe <- function(x)
   return(y)
 }
 
+
+
+## 8 ##
 
 listToFrame <- function(listLists)
 {
@@ -322,7 +358,7 @@ listToFrame <- function(listLists)
   
   ## pre-process for making comparisons
   
-  library(stringr)
+  suppressPackageStartupMessages(library(stringr))
   summaryTable$Disease...Target..Pathway <- tolower(str_replace_all(string=summaryTable$Disease...Target..Pathway, pattern=" ", repl=""))
   
   
@@ -335,7 +371,7 @@ listToFrame <- function(listLists)
   
   ## define a dictionary to hold sample-target pathway association
   
-  library(hash)
+  suppressPackageStartupMessages(library(hash))
   sampleDiseaseDictionary <- hash(keys = summaryTable$GSM, values = summaryTable$AffiliateDiseasePool)
   
   ## return a column with the noted values for a particular sample against it's target pathway
@@ -350,6 +386,8 @@ listToFrame <- function(listLists)
 }
 
 
+## 9 ##
+## This function displays the plot for a given performance metric as well as saves them as an extraneous file.
 
 plotMetrics <- function(x, metric)
 {
@@ -364,7 +402,7 @@ plotMetrics <- function(x, metric)
 }
 
 
-
+## 10 ##
 ## The following function takes the sensitivity and specificity values for the respective tools and draws out an ROC.
 
 rocPlot <- function()
@@ -383,6 +421,8 @@ rocPlot <- function()
 }
 
 
+## 11 ##
+## Executing Seq2Pathway tool. This takes as input the location of the folder with the data.
 
 executeSeq2pathway <- function(loc){
   ## Testing individual data in benchmark dataset with each GSA tool package
@@ -432,6 +472,11 @@ executeSeq2pathway <- function(loc){
   rm(seq2pathwayResults)
 }
 
+
+
+## 12 ##
+## Executing ChIPEnrich tool. This takes as input the location of the folder with the data.
+
 executeChipenrich <- function(loc){
   ## Testing individual data in benchmark dataset with each GSA tool package
   ## Also, since several of the tools don't acknowledge the mitochondrial DNA ("chrMT") entries have to be removed from the BED files.
@@ -471,6 +516,9 @@ executeChipenrich <- function(loc){
   rm(chipenrichResults)
 }
 
+
+## 13 ##
+## Executing BroadEnrich tool. This takes as input the location of the folder with the data.
 
 executeBroadenrich <- function(loc){
   ## Testing individual data in benchmark dataset with each GSA tool package
@@ -514,15 +562,8 @@ executeBroadenrich <- function(loc){
 }
 
 
-## Loading disease definitions
-
-loadcc <- function() { colorectalCancerPool <<- readRDS("./data/colorectalCancerPool"); diseasePools <<- append(diseasePools, "colorectalCancerPool")}
-loadpc <- function() { prostateCancerPool <<- readRDS("./data/prostateCancerPool"); diseasePools <<- append(diseasePools, "prostateCancerPool")}
-loadgc <- function() { gastricCancerPool <<- readRDS("./data/gastricCancerPool"); diseasePools <<- append(diseasePools, "gastricCancerPool")}
-loadad <- function() { alzheimersDiseasePool <<- readRDS("./data/alzheimersDiseasePool"); diseasePools <<- append(diseasePools, "alzheimersDiseasePool")}
-
-
 ## Calculating metrics for all selected tools
+## 14 ##
 ## Prioritization
 
 runPrioritization <- function() {
@@ -539,6 +580,7 @@ runPrioritization <- function() {
 }
 
 
+## 15 ##
 ## Precision
 
 runPrecision <- function() {
@@ -555,6 +597,7 @@ runPrecision <- function() {
 }
 
 
+## 16 ##
 ##Sensitivity
 
 runSensitivity <- function() {
@@ -571,6 +614,7 @@ runSensitivity <- function() {
 }
 
 
+## 17 ##
 ##Specificity
 
 runSpecificity <- function() {
@@ -585,3 +629,10 @@ runSpecificity <- function() {
   
   saveRDS(consolidatedSpecificity, "./data/results/consolidatedSpecificity")
 }
+
+## Loading disease definitions
+
+loadcc <- function() { colorectalCancerPool <<- readRDS("./data/colorectalCancerPool"); diseasePools <<- append(diseasePools, "colorectalCancerPool")}
+loadpc <- function() { prostateCancerPool <<- readRDS("./data/prostateCancerPool"); diseasePools <<- append(diseasePools, "prostateCancerPool")}
+loadgc <- function() { gastricCancerPool <<- readRDS("./data/gastricCancerPool"); diseasePools <<- append(diseasePools, "gastricCancerPool")}
+loadad <- function() { alzheimersDiseasePool <<- readRDS("./data/alzheimersDiseasePool"); diseasePools <<- append(diseasePools, "alzheimersDiseasePool")}

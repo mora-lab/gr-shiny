@@ -1,3 +1,6 @@
+## Author: Shaurya Jauhari
+## Last Reviewed: December 14th, 2020.
+
 # Server logic 
 shinyServer(function(input, output, session){
   

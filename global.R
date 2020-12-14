@@ -1,3 +1,5 @@
+## Author: Shaurya Jauhari
+## Last Reviewed: December 14th, 2020.
 ## Setting up the global environment
 ## Installing and Loading libraries.
 
